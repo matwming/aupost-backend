@@ -1,4 +1,4 @@
-<u>This app is structured as follows:</u>
+<u><b>This app is structured as follows:</b></u>
 * src: this is the main entry folder of this app;
      
      1.Three are three sub folders: 
@@ -6,14 +6,14 @@
      * models: where interfaces are defined
      * routes: redirect post, get, path and delete requests to respective controllers
 
-<u> Packages that are used in this app:</u>
+<u><b> Packages that are used in this app:</b></u>
 
 * axios: handles all http requests in node environment
 * body-parser: parse body content
 * express: lightweight framework,
 * nodemon: automatic restart service in development
 
-<u>How to start the app:</u>
+<u><b>How to start the app:</b></u>
 1. install all dependencies:
 <code>npm install </code>
 2. start the service:
