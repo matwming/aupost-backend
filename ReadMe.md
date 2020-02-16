@@ -23,7 +23,7 @@ After the two steps, you should see the following in the console:
 <code>Example app listening on port 8180!
 </code>
 
-<u>If App cannot be started:</u>
+<u><b>If App cannot be started:</b></u>
 * is port 8180 is used before starting this app?
 * run the following commands to reinstall all dependencies:
 <code>rm -rf node_modules && npm install </code>
