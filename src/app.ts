@@ -3,7 +3,7 @@ import router from './routes/routes';
 import bodyParser from "body-parser";
 
 const app = express();
-const port: number = 8180;
+const port = process.env.PORT||8180;
 
 
 /*

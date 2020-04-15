@@ -7,7 +7,7 @@ const express_1 = __importDefault(require("express"));
 const routes_1 = __importDefault(require("./routes/routes"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const app = express_1.default();
-const port = 8180;
+const port = process.env.PORT || 8180;
 /*
 * middleware to parse body content
 * */
