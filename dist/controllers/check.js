@@ -1,6 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
-const config_1 = require("../config");
+const config_1 = require("../config/config");
 exports.check = (req, res) => {
     let requestData = req.body;
     //console.log('requesData',requestData);

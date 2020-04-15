@@ -1,11 +1,12 @@
 import express, {Request, Response, NextFunction} from 'express';
 import router from './routes/routes';
 import bodyParser from "body-parser";
+import connectDB from "./config/db";
 
 const app = express();
 const port = process.env.PORT||8180;
 
-
+connectDB().then(r => console.log(r)).catch(e=>console.log(e));
 /*
 * middleware to parse body content
 * */

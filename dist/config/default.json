@@ -1,0 +1,4 @@
+{
+  "mongoURI":"mongodb://ming-mel-db:MYaZY8fmCPuUGEPpm5c7JgEPMfrllW9AGwnG93QUlmTQhR5l8nRAgvO7RHpBW6wHmbp3cSqMYsGlovfqfe3BUA==@ming-mel-db.mongo.cosmos.azure.com:10255/?ssl=true&replicaSet=globaldb&retrywrites=false&maxIdleTimeMS=120000&appName=@ming-mel-db@",
+  "jwtSecret": "mysecrettoken"
+}
