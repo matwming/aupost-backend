@@ -13,3 +13,10 @@ export const validationLogin=()=>{
         check('password','Password is required').exists()
     ]
 };
+
+export const validationProfile=()=>{
+    return [
+        check('status','Status is required').not().isEmpty(),
+        check('skills','Skills are required').not().isEmpty()
+    ]
+};

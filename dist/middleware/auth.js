@@ -3,21 +3,23 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+process.env["NODE_CONFIG_DIR"] = "/Users/mingwu/Projects/devconnector/dist/config";
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
 const config_1 = __importDefault(require("config"));
 const handleAuth = (req, res, next) => {
-    const token = req.header('x-auth-token');
+    const token = req.header("x-auth-token");
     if (!token) {
-        return res.status(401).json({ msg: 'No token,Authorization denied' });
+        return res.status(401).json({ msg: "No token,Authorization denied" });
     }
     try {
-        const decode = jsonwebtoken_1.default.verify(token, config_1.default.get('jwtSecret'));
+        const decode = jsonwebtoken_1.default.verify(token, config_1.default.get("jwtSecret"));
+        console.log('decode', decode);
         //@ts-ignore
         req.user = decode.user;
         next();
     }
     catch (e) {
-        return res.status(401).json({ msg: 'Token is not valid' });
+        return res.status(401).json({ msg: "Token is not valid" });
     }
 };
 exports.default = handleAuth;

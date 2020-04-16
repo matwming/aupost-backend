@@ -107,4 +107,5 @@ const ProfileSchema = new mongoose_1.default.Schema({
         default: Date.now
     }
 });
-exports.default = ProfileSchema;
+const Profile = mongoose_1.default.model('profile', ProfileSchema);
+exports.default = Profile;

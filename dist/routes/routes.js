@@ -15,8 +15,11 @@ const auth = __importStar(require("../controllers/v1/auth"));
 const users_1 = __importDefault(require("../controllers/v1/users"));
 const validation_1 = require("../utils/validation");
 const auth_1 = __importDefault(require("../middleware/auth"));
+const getProfile_1 = __importDefault(require("../controllers/v1/Profile/getProfile"));
+const createProfile_1 = __importDefault(require("../controllers/v1/Profile/createProfile"));
+const getAllorOneProfiles_1 = __importDefault(require("../controllers/v1/Profile/getAllorOneProfiles"));
 const router = express_1.Router();
-const currentAPIversion = 'v1';
+const currentAPIversion = "v1";
 /**
  * @method Get
  * @header
@@ -24,7 +27,7 @@ const currentAPIversion = 'v1';
  * @desc Test
  * @access Public
  */
-router.get('/', (req, res) => res.send('<h1>MERN Project API</h1>'));
+router.get("/", (req, res) => res.send("<h1>MERN Project API</h1>"));
 /**
  * @method Post
  * @header api_key
@@ -55,5 +58,23 @@ router.post(`/api/${currentAPIversion}/auth`, validation_1.validationLogin(), au
  * @access Private
  * @return
  */
-router.post(`/api/profile/me`, auth_1.default);
+router.get(`/api/profile/me`, auth_1.default, getProfile_1.default);
+/**
+ * @method Post api/profile
+ * @header api_key
+ * @param customer information, please refer to interface definition in models/checkResponse
+ * @desc Get current users profile
+ * @access Private
+ * @return
+ */
+router.post(`/api/profile`, auth_1.default, validation_1.validationProfile(), createProfile_1.default);
+/**
+ * @method Post api/profile
+ * @header api_key
+ * @param customer information, please refer to interface definition in models/checkResponse
+ * @desc Get current users profile
+ * @access Private
+ * @return
+ */
+router.get(`/api/profile/:user_id`, getAllorOneProfiles_1.default);
 exports.default = router;

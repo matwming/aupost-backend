@@ -22,6 +22,6 @@ app.use('/', routes_1.default);
 * middleware to catch any errors and send to the front end
 * */
 app.use((err, req, res, next) => {
-    res.json({ error: err.message });
+    res.json({ error: err.message, msg: 'unhandled routes' });
 });
 app.listen(port, () => console.log(`Example app listening on port ${port}!`));

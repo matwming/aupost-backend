@@ -14,3 +14,9 @@ exports.validationLogin = () => {
         express_validator_1.check('password', 'Password is required').exists()
     ];
 };
+exports.validationProfile = () => {
+    return [
+        express_validator_1.check('status', 'Status is required').not().isEmpty(),
+        express_validator_1.check('skills', 'Skills are required').not().isEmpty()
+    ];
+};
