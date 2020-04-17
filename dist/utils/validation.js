@@ -20,3 +20,18 @@ exports.validationProfile = () => {
         express_validator_1.check('skills', 'Skills are required').not().isEmpty()
     ];
 };
+exports.validationUpdateProfile = () => {
+    return [
+        express_validator_1.check('title', 'Title is required').not().isEmpty(),
+        express_validator_1.check('company', 'Company is required').not().isEmpty(),
+        express_validator_1.check('from', 'From date is required').not().isEmpty()
+    ];
+};
+exports.validationUpdateEducation = () => {
+    return [
+        express_validator_1.check('school', 'School is required').not().isEmpty(),
+        express_validator_1.check('degree', 'Degree is required').not().isEmpty(),
+        express_validator_1.check('fieldofstudy', 'Fields of Study is required').not().isEmpty(),
+        express_validator_1.check('from', 'From date is required').not().isEmpty()
+    ];
+};

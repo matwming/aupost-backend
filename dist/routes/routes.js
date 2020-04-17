@@ -19,6 +19,11 @@ const getProfile_1 = __importDefault(require("../controllers/v1/Profile/getProfi
 const createProfile_1 = __importDefault(require("../controllers/v1/Profile/createProfile"));
 const getAllorOneProfiles_1 = __importDefault(require("../controllers/v1/Profile/getAllorOneProfiles"));
 const deleteProfile_1 = __importDefault(require("../controllers/v1/Profile/deleteProfile"));
+const updateProfile_1 = __importDefault(require("../controllers/v1/Profile/updateProfile"));
+const deleteExperience_1 = __importDefault(require("../controllers/v1/Profile/deleteExperience"));
+const updateEducation_1 = __importDefault(require("../controllers/v1/Profile/updateEducation"));
+const deleteEducation_1 = __importDefault(require("../controllers/v1/Profile/deleteEducation"));
+const getRepos_1 = __importDefault(require("../controllers/v1/github/getRepos"));
 const router = express_1.Router();
 const currentAPIversion = "v1";
 /**
@@ -87,4 +92,17 @@ router.get(`/api/profile/:user_id`, getAllorOneProfiles_1.default);
  * @return
  */
 router.delete(`/api/profile`, auth_1.default, deleteProfile_1.default);
+/**
+ * @method Delete api/profile
+ * @header api_key
+ * @param customer information, please refer to interface definition in models/checkResponse
+ * @desc Delete profile,user, posts
+ * @access Private
+ * @return
+ */
+router.put(`/api/profile/experience`, auth_1.default, validation_1.validationUpdateProfile(), updateProfile_1.default);
+router.delete(`/api/profile/experience/:exp_id`, auth_1.default, deleteExperience_1.default);
+router.put(`/api/profile/education`, auth_1.default, validation_1.validationUpdateEducation(), updateEducation_1.default);
+router.delete(`/api/profile/education/:exp_id`, auth_1.default, deleteEducation_1.default);
+router.get('/api/github/:username', getRepos_1.default);
 exports.default = router;

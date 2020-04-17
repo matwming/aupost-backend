@@ -20,3 +20,19 @@ export const validationProfile=()=>{
         check('skills','Skills are required').not().isEmpty()
     ]
 };
+
+export const validationUpdateProfile=()=>{
+    return [
+        check('title','Title is required').not().isEmpty(),
+        check('company','Company is required').not().isEmpty(),
+        check('from','From date is required').not().isEmpty()
+    ]
+};
+export const validationUpdateEducation=()=>{
+    return [
+        check('school','School is required').not().isEmpty(),
+        check('degree','Degree is required').not().isEmpty(),
+        check('fieldofstudy','Fields of Study is required').not().isEmpty(),
+        check('from','From date is required').not().isEmpty()
+    ]
+};

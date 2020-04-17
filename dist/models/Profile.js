@@ -59,15 +59,15 @@ const ProfileSchema = new mongoose_1.default.Schema({
             }
         }],
     education: [{
-            title: {
+            degree: {
                 type: String,
                 required: true
             },
-            company: {
+            school: {
                 type: String,
                 required: true
             },
-            location: {
+            fieldofstudy: {
                 type: String
             },
             from: {
