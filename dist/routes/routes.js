@@ -18,6 +18,7 @@ const auth_1 = __importDefault(require("../middleware/auth"));
 const getProfile_1 = __importDefault(require("../controllers/v1/Profile/getProfile"));
 const createProfile_1 = __importDefault(require("../controllers/v1/Profile/createProfile"));
 const getAllorOneProfiles_1 = __importDefault(require("../controllers/v1/Profile/getAllorOneProfiles"));
+const deleteProfile_1 = __importDefault(require("../controllers/v1/Profile/deleteProfile"));
 const router = express_1.Router();
 const currentAPIversion = "v1";
 /**
@@ -77,4 +78,13 @@ router.post(`/api/profile`, auth_1.default, validation_1.validationProfile(), cr
  * @return
  */
 router.get(`/api/profile/:user_id`, getAllorOneProfiles_1.default);
+/**
+ * @method Delete api/profile
+ * @header api_key
+ * @param customer information, please refer to interface definition in models/checkResponse
+ * @desc Delete profile,user, posts
+ * @access Private
+ * @return
+ */
+router.delete(`/api/profile`, auth_1.default, deleteProfile_1.default);
 exports.default = router;

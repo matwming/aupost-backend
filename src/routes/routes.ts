@@ -10,6 +10,7 @@ import handleAuth from "../middleware/auth";
 import getProfile from "../controllers/v1/Profile/getProfile";
 import createProfile from "../controllers/v1/Profile/createProfile";
 import getAllorOneProfiles from "../controllers/v1/Profile/getAllorOneProfiles";
+import deleteProfile from "../controllers/v1/Profile/deleteProfile";
 
 const router = Router();
 const currentAPIversion = "v1";
@@ -69,7 +70,7 @@ router.get(`/api/profile/me`, handleAuth, getProfile);
  * @return
  */
 
-router.post(`/api/profile`, handleAuth,validationProfile(), createProfile);
+router.post(`/api/profile`, handleAuth, validationProfile(), createProfile);
 
 /**
  * @method Post api/profile
@@ -82,5 +83,14 @@ router.post(`/api/profile`, handleAuth,validationProfile(), createProfile);
 
 router.get(`/api/profile/:user_id`, getAllorOneProfiles);
 
+/**
+ * @method Delete api/profile
+ * @header api_key
+ * @param customer information, please refer to interface definition in models/checkResponse
+ * @desc Delete profile,user, posts
+ * @access Private
+ * @return
+ */
 
+router.delete(`/api/profile`, handleAuth, deleteProfile);
 export default router;
