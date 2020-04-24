@@ -3,59 +3,64 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-process.env["NODE_CONFIG_DIR"] = "/Users/mingwu/Projects/devconnector/dist/config";
+const app_1 = require("../../app");
 const express_validator_1 = require("express-validator");
-const User_1 = __importDefault(require("../../models/User"));
 const gravatar_1 = __importDefault(require("gravatar"));
 const bcryptjs_1 = __importDefault(require("bcryptjs"));
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("config"));
+// create user post api
 const users = async (req, res) => {
     //console.log('users',req.body);
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
         return res.status(400).json({ errors: errors.array() });
     }
-    const { name, email, password } = req.body;
+    let { name, email, password } = req.body;
     try {
         // see if user exists
-        let user = await User_1.default.findOne({ email });
-        if (user) {
-            return res.status(400).json({ errors: [{ msg: 'User already exists' }] });
-        }
-        // get users gravatar
-        const avatar = gravatar_1.default.url(email, {
-            s: '200',
-            r: 'pg',
-            d: 'mm'
-        });
-        user = new User_1.default({
-            name, email, avatar, password
-        });
-        // Encrypt password
-        const salt = await bcryptjs_1.default.genSalt(10);
-        //@ts-ignore
-        user.password = await bcryptjs_1.default.hash(password, salt);
-        await user.save();
-        // return jsonwebtoken
-        const payload = {
-            user: {
-                id: user.id,
-                token: 'error'
+        app_1.pool.query(`select * from users where email="${email}"`, async (err, results, fields) => {
+            if (err) {
+                console.log("select user error", err);
+                return;
             }
-        };
-        jsonwebtoken_1.default.sign(payload, config_1.default.get('jwtSecret'), {
-            expiresIn: 36000
-        }, (errBack, token) => {
-            if (errBack)
-                throw errBack;
-            payload.user.token = token;
-            return res.json(payload);
+            console.log("result", results);
+            if (results.length > 0) {
+                return res
+                    .status(400)
+                    .json({ errors: [{ msg: "User already exists" }] });
+            }
+            const avatar = gravatar_1.default.url(email, {
+                s: "200",
+                r: "pg",
+                d: "mm",
+            });
+            const salt = await bcryptjs_1.default.genSalt(10);
+            password = await bcryptjs_1.default.hash(password, salt);
+            app_1.pool.query(`insert into users(name, email,password,avatar) values("${name}","${email}","${password}","${avatar}")`, (err, results, fields) => {
+                if (err) {
+                    console.log("inserting users table has an error", err.message);
+                    return;
+                }
+                console.log("result", results);
+                const payload = {
+                    user: {
+                        token: "error",
+                    },
+                };
+                jsonwebtoken_1.default.sign(payload, "aupost_project", {
+                    expiresIn: 36000,
+                }, (errBack, token) => {
+                    if (errBack)
+                        throw errBack;
+                    payload.user.token = token;
+                    return res.json(payload);
+                });
+            });
         });
     }
     catch (e) {
         console.log(e.message);
-        res.status(500).send('Server error');
+        res.status(500).send("Server error");
     }
 };
 exports.default = users;

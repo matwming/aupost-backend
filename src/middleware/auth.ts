@@ -10,10 +10,10 @@ const handleAuth = (req: Request, res: Response, next: NextFunction) => {
     return res.status(401).json({ msg: "No token,Authorization denied" });
   }
   try {
-    const decode = jwt.verify(token, config.get("jwtSecret"));
+    const decode = jwt.verify(token, 'aupost_project');
     console.log('decode',decode)
     //@ts-ignore
-    req.user = decode.user;
+    req.body.user = decode.user;
     next();
   } catch (e) {
     return res.status(401).json({ msg: "Token is not valid" });

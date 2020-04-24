@@ -1,61 +1,75 @@
-process.env["NODE_CONFIG_DIR"]="/Users/mingwu/Projects/devconnector/dist/config";
-import {Request, Response, RequestHandler} from "express";
-import {validationResult} from "express-validator";
-import User,{IUser} from "../../models/User";
-import gravatar from 'gravatar';
-import bcrypt from 'bcryptjs';
-import jwt from 'jsonwebtoken';
-import config from 'config'
+import { pool } from "../../app";
+import { Request, Response, RequestHandler } from "express";
+import { validationResult } from "express-validator";
+import gravatar from "gravatar";
+import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 
+// create user post api
 const users: RequestHandler = async (req: Request, res: Response) => {
-    //console.log('users',req.body);
-    const errors=validationResult(req);
-    if(!errors.isEmpty()){
-        return res.status(400).json({errors:errors.array()});
-    }
+  //console.log('users',req.body);
+  const errors = validationResult(req);
+  if (!errors.isEmpty()) {
+    return res.status(400).json({ errors: errors.array() });
+  }
 
-    const {name,email,password}=req.body;
-    try{
-        // see if user exists
-        let user=await User.findOne({email});
-        if(user){
-          return  res.status(400).json({errors:[{msg:'User already exists'}]})
+  let { name, email, password } = req.body;
+  try {
+    // see if user exists
+    pool.query(
+      `select * from users where email="${email}"`,
+      async (err, results, fields) => {
+        if (err) {
+          console.log("select user error", err);
+          return;
         }
-        // get users gravatar
-        const avatar=gravatar.url(email,{
-            s:'200',
-            r:'pg',
-            d:'mm'
-        });
-        user=new User({
-            name,email,avatar,password
+        console.log("result", results);
+        if (results.length > 0) {
+          return res
+            .status(400)
+            .json({ errors: [{ msg: "User already exists" }] });
+        }
+        const avatar = gravatar.url(email, {
+          s: "200",
+          r: "pg",
+          d: "mm",
         });
 
-        // Encrypt password
-
-        const salt=await bcrypt.genSalt(10);
-        //@ts-ignore
-        user.password=await bcrypt.hash(password,salt);
-        await user.save();
-        // return jsonwebtoken
-        const payload={
-            user:{
-                id:user.id,
-                token:'error'
+        const salt = await bcrypt.genSalt(10);
+        password = await bcrypt.hash(password, salt);
+        pool.query(
+          `insert into users(name, email,password,avatar) values("${name}","${email}","${password}","${avatar}")`,
+          (err, results, fields) => {
+            if (err) {
+              console.log("inserting users table has an error", err.message);
+              return;
             }
-        };
-        jwt.sign(payload,config.get('jwtSecret'),{
-            expiresIn:36000
-        },(errBack,token)=>{
-            if(errBack)throw errBack;
-            payload.user.token = token as string;
-            return res.json(payload);
-        });
-    }catch(e){
-        console.log(e.message);
-        res.status(500).send('Server error');
-    }
-
+            console.log("result", results);
+            const payload = {
+              user: {
+                token: "error",
+              },
+            };
+            jwt.sign(
+              payload,
+              "aupost_project",
+              {
+                expiresIn: 36000,
+              },
+              (errBack, token) => {
+                if (errBack) throw errBack;
+                payload.user.token = token as string;
+                return res.json(payload);
+              }
+            );
+          }
+        );
+      }
+    );
+  } catch (e) {
+    console.log(e.message);
+    res.status(500).send("Server error");
+  }
 };
 
 export default users;

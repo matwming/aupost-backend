@@ -3,23 +3,21 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-process.env["NODE_CONFIG_DIR"] =
-    "/Users/mingwu/Projects/devconnector/dist/config";
-const mongoose_1 = __importDefault(require("mongoose"));
-const config_1 = __importDefault(require("config"));
-const db = config_1.default.get("mongoURI");
-const connectDB = async () => {
-    try {
-        await mongoose_1.default.connect(db, {
-            useNewUrlParser: true,
-            useCreateIndex: true,
-            useFindAndModify: false,
-        });
-        console.log("MongoDb connected...");
-    }
-    catch (e) {
-        console.log(e.message);
-        process.exit(1);
-    }
+const mysql_1 = __importDefault(require("mysql"));
+exports.pool = mysql_1.default.createPool({
+    host: '13.70.105.218',
+    port: 3306,
+    password: 'Zhaoying@8604',
+    database: 'aupost_project'
+});
+const getMysqlConnection = () => {
+    return exports.pool.getConnection((err, connection) => {
+        if (err) {
+            console.error('error connecting: ', err.stack);
+            return;
+        }
+        console.log('successfully connected to aupost_project');
+        connection.release();
+    });
 };
-exports.default = connectDB;
+exports.default = getMysqlConnection;

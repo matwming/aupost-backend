@@ -15,15 +15,7 @@ const auth = __importStar(require("../controllers/v1/auth"));
 const users_1 = __importDefault(require("../controllers/v1/users"));
 const validation_1 = require("../utils/validation");
 const auth_1 = __importDefault(require("../middleware/auth"));
-const getProfile_1 = __importDefault(require("../controllers/v1/Profile/getProfile"));
-const createProfile_1 = __importDefault(require("../controllers/v1/Profile/createProfile"));
-const getAllorOneProfiles_1 = __importDefault(require("../controllers/v1/Profile/getAllorOneProfiles"));
-const deleteProfile_1 = __importDefault(require("../controllers/v1/Profile/deleteProfile"));
-const updateProfile_1 = __importDefault(require("../controllers/v1/Profile/updateProfile"));
-const deleteExperience_1 = __importDefault(require("../controllers/v1/Profile/deleteExperience"));
-const updateEducation_1 = __importDefault(require("../controllers/v1/Profile/updateEducation"));
-const deleteEducation_1 = __importDefault(require("../controllers/v1/Profile/deleteEducation"));
-const getRepos_1 = __importDefault(require("../controllers/v1/github/getRepos"));
+const address_1 = __importDefault(require("../controllers/v1/address"));
 const router = express_1.Router();
 const currentAPIversion = "v1";
 /**
@@ -42,7 +34,7 @@ router.get("/", (req, res) => res.send("<h1>MERN Project API</h1>"));
  */
 router.get(`/api/${currentAPIversion}/auth`, auth_1.default, auth.verify);
 /**
- * @method Post
+ * @method Post- create users
  * @header
  * @return
  * @desc create a user
@@ -57,52 +49,12 @@ router.post(`/api/${currentAPIversion}/users`, validation_1.validation(), users_
  */
 router.post(`/api/${currentAPIversion}/auth`, validation_1.validationLogin(), auth.login);
 /**
- * @method Get api/profile/me
+ * @method get address
  * @header api_key
  * @param customer information, please refer to interface definition in models/checkResponse
  * @desc Get current users profile
  * @access Private
  * @return
  */
-router.get(`/api/profile/me`, auth_1.default, getProfile_1.default);
-/**
- * @method Post api/profile
- * @header api_key
- * @param customer information, please refer to interface definition in models/checkResponse
- * @desc Get current users profile
- * @access Private
- * @return
- */
-router.post(`/api/profile`, auth_1.default, validation_1.validationProfile(), createProfile_1.default);
-/**
- * @method Post api/profile
- * @header api_key
- * @param customer information, please refer to interface definition in models/checkResponse
- * @desc Get current users profile
- * @access Private
- * @return
- */
-router.get(`/api/profile/:user_id`, getAllorOneProfiles_1.default);
-/**
- * @method Delete api/profile
- * @header api_key
- * @param customer information, please refer to interface definition in models/checkResponse
- * @desc Delete profile,user, posts
- * @access Private
- * @return
- */
-router.delete(`/api/profile`, auth_1.default, deleteProfile_1.default);
-/**
- * @method Delete api/profile
- * @header api_key
- * @param customer information, please refer to interface definition in models/checkResponse
- * @desc Delete profile,user, posts
- * @access Private
- * @return
- */
-router.put(`/api/profile/experience`, auth_1.default, validation_1.validationUpdateProfile(), updateProfile_1.default);
-router.delete(`/api/profile/experience/:exp_id`, auth_1.default, deleteExperience_1.default);
-router.put(`/api/profile/education`, auth_1.default, validation_1.validationUpdateEducation(), updateEducation_1.default);
-router.delete(`/api/profile/education/:exp_id`, auth_1.default, deleteEducation_1.default);
-router.get('/api/github/:username', getRepos_1.default);
+router.get(`/api/address/me`, auth_1.default, address_1.default);
 exports.default = router;

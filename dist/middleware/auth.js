@@ -5,17 +5,16 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 process.env["NODE_CONFIG_DIR"] = "/Users/mingwu/Projects/devconnector/dist/config";
 const jsonwebtoken_1 = __importDefault(require("jsonwebtoken"));
-const config_1 = __importDefault(require("config"));
 const handleAuth = (req, res, next) => {
     const token = req.header("x-auth-token");
     if (!token) {
         return res.status(401).json({ msg: "No token,Authorization denied" });
     }
     try {
-        const decode = jsonwebtoken_1.default.verify(token, config_1.default.get("jwtSecret"));
+        const decode = jsonwebtoken_1.default.verify(token, 'aupost_project');
         console.log('decode', decode);
         //@ts-ignore
-        req.user = decode.user;
+        req.body.user = decode.user;
         next();
     }
     catch (e) {

@@ -1,12 +1,26 @@
 import express, {Request, Response, NextFunction} from 'express';
 import router from './routes/routes';
 import bodyParser from "body-parser";
-import connectDB from "./config/db";
+import mysql, {MysqlError, PoolConnection} from "mysql";
 
 const app = express();
 const port = process.env.PORT||8180;
 
-connectDB().then(r => console.log(r)).catch(e=>console.log(e));
+export const pool=mysql.createPool({
+    host:'13.70.105.218',
+    port:3306,
+    user:'root',
+    password:'Zhaoying@8604',
+    database:'aupost_project'
+});
+pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
+    if(err){
+        console.error('error connecting: ', err.stack);
+        return;
+    }
+    console.log('successfully connected to aupost_project');
+    connection.release();
+});
 /*
 * middleware to parse body content
 * */

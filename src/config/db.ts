@@ -1,21 +1,20 @@
-process.env["NODE_CONFIG_DIR"] =
-  "/Users/mingwu/Projects/devconnector/dist/config";
-import mongoose from "mongoose";
-import config from "config";
+import mysql, {MysqlError, PoolConnection} from 'mysql';
 
-const db: string = config.get("mongoURI");
-
-const connectDB = async () => {
-  try {
-    await mongoose.connect(db, {
-      useNewUrlParser: true,
-      useCreateIndex: true,
-      useFindAndModify: false,
-    });
-    console.log("MongoDb connected...");
-  } catch (e) {
-    console.log(e.message);
-    process.exit(1);
-  }
+export const pool=mysql.createPool({
+  host:'13.70.105.218',
+  port:3306,
+  password:'Zhaoying@8604',
+  database:'aupost_project'
+});
+const getMysqlConnection=()=>{
+  return pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
+    if(err){
+      console.error('error connecting: ', err.stack);
+      return;
+    }
+    console.log('successfully connected to aupost_project');
+    connection.release();
+  });
 };
-export default connectDB;
+
+export default getMysqlConnection;

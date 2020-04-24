@@ -6,10 +6,24 @@ Object.defineProperty(exports, "__esModule", { value: true });
 const express_1 = __importDefault(require("express"));
 const routes_1 = __importDefault(require("./routes/routes"));
 const body_parser_1 = __importDefault(require("body-parser"));
-const db_1 = __importDefault(require("./config/db"));
+const mysql_1 = __importDefault(require("mysql"));
 const app = express_1.default();
 const port = process.env.PORT || 8180;
-db_1.default().then(r => console.log(r)).catch(e => console.log(e));
+exports.pool = mysql_1.default.createPool({
+    host: '13.70.105.218',
+    port: 3306,
+    user: 'root',
+    password: 'Zhaoying@8604',
+    database: 'aupost_project'
+});
+exports.pool.getConnection((err, connection) => {
+    if (err) {
+        console.error('error connecting: ', err.stack);
+        return;
+    }
+    console.log('successfully connected to aupost_project');
+    connection.release();
+});
 /*
 * middleware to parse body content
 * */
