@@ -8,7 +8,7 @@ const routes_1 = __importDefault(require("./routes/routes"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const mysql_1 = __importDefault(require("mysql"));
 const app = express_1.default();
-const port = process.env.PORT || 8180;
+const port = 8180;
 exports.pool = mysql_1.default.createPool({
     host: '13.70.105.218',
     port: 3306,

@@ -64,6 +64,7 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
           (errBack, token) => {
             if (errBack) throw errBack;
             payload.user.token = token as string;
+            Object.assign(payload,{success:true});
             return res.json(payload);
           }
         );

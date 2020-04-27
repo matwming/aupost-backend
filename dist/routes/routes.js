@@ -15,7 +15,7 @@ const auth = __importStar(require("../controllers/v1/auth"));
 const users_1 = __importDefault(require("../controllers/v1/users"));
 const validation_1 = require("../utils/validation");
 const auth_1 = __importDefault(require("../middleware/auth"));
-const address_1 = __importDefault(require("../controllers/v1/address"));
+const address_1 = require("../controllers/v1/address");
 const router = express_1.Router();
 const currentAPIversion = "v1";
 /**
@@ -56,5 +56,13 @@ router.post(`/api/${currentAPIversion}/auth`, validation_1.validationLogin(), au
  * @access Private
  * @return
  */
-router.get(`/api/address/me`, auth_1.default, address_1.default);
+router.get(`/api/address/me`, auth_1.default, address_1.getAddress);
+/**
+ * @method post address
+ * @param
+ * @desc save user address to database
+ * @access Private
+ * @return
+ */
+router.post(`/api/v1/save-address`, auth_1.default, address_1.saveAddress);
 exports.default = router;

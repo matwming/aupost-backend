@@ -4,7 +4,7 @@ import bodyParser from "body-parser";
 import mysql, {MysqlError, PoolConnection} from "mysql";
 
 const app = express();
-const port = process.env.PORT||8180;
+const port =8180;
 
 export const pool=mysql.createPool({
     host:'13.70.105.218',

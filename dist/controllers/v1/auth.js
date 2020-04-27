@@ -57,6 +57,7 @@ exports.login = async (req, res) => {
                 if (errBack)
                     throw errBack;
                 payload.user.token = token;
+                Object.assign(payload, { success: true });
                 return res.json(payload);
             });
         });

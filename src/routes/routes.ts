@@ -7,7 +7,7 @@ import {
   validationProfile, validationUpdateEducation, validationUpdateProfile,
 } from "../utils/validation";
 import handleAuth from "../middleware/auth";
-import getAddress from "../controllers/v1/address";
+import {getAddress,saveAddress} from "../controllers/v1/address";
 
 const router = Router();
 const currentAPIversion = "v1";
@@ -58,9 +58,15 @@ router.post(`/api/${currentAPIversion}/auth`, validationLogin(), auth.login);
 
 router.get(`/api/address/me`, handleAuth, getAddress);
 
+/**
+ * @method post address
+ * @param
+ * @desc save user address to database
+ * @access Private
+ * @return
+ */
 
-
-
+router.post(`/api/v1/save-address`, handleAuth, saveAddress);
 
 
 export default router;
