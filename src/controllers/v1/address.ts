@@ -48,7 +48,7 @@ export const saveAddress = async (req: Request, res: Response) => {
   } = req.body;
     const { email } = req.body.user;
   console.log("expected_dispatch", expected_dispatch);
-  createShipment()
+  createShipment(req.body)
     .then((response: AxiosResponse | void) => {
       //@ts-ignore
       console.log("address", response.data);

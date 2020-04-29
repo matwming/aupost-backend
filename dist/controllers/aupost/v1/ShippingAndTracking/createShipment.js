@@ -1,7 +1,8 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../../../../config/config");
-const createShipment = () => {
+const createShipment = (shipmentInfo) => {
+    const { charge_code, deliver_to, country, residence, address, phone, consignment_weight, product_classification, expected_dispatch, contents, unit_value, value, } = shipmentInfo;
     const body = {
         shipments: [
             {
@@ -9,21 +10,23 @@ const createShipment = () => {
                 customer_reference_1: "cb1234",
                 customer_reference_2: "cb2345",
                 from: {
-                    name: "Christy Chen",
-                    lines: ["420 Station Street"],
-                    suburb: "Box Hill",
-                    postcode: "3128",
-                    state: "VIC",
+                    "name": "Christy Chen",
+                    "lines": [
+                        "420 Station Street"
+                    ],
+                    "suburb": "Box Hill",
+                    "postcode": "3128",
+                    "state": "VIC"
                 },
                 to: {
-                    name: "Test",
+                    name: deliver_to,
                     business_name: "Test",
-                    lines: ["Test"],
-                    suburb: "Beijing",
-                    state: "Beijing",
-                    country: "CN",
+                    lines: [address],
+                    suburb: residence[2],
+                    state: residence[1],
+                    country: country,
                     postcode: "100000",
-                    phone: "13900008888",
+                    phone: phone,
                     email: "carl@gmai.co",
                     delivery_instructions: "NA",
                 },
@@ -32,17 +35,17 @@ const createShipment = () => {
                         length: "10",
                         height: "10",
                         width: "10",
-                        weight: "1",
+                        weight: consignment_weight,
                         item_reference: "blocked",
                         product_id: "PTI8",
                         commercial_value: false,
-                        classification_type: "GIFT",
+                        classification_type: product_classification,
                         description_of_other: "A pair of shoes",
                         item_contents: [
                             {
-                                description: "Some stuff",
+                                description: contents,
                                 quantity: 1,
-                                value: 1.23,
+                                value: value,
                                 tariff_code: 123456,
                                 country_of_origin: "AU",
                                 weight: 0.34,

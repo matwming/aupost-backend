@@ -31,7 +31,7 @@ exports.saveAddress = async (req, res) => {
     const { charge_code, deliver_to, country, residence, address, phone, consignment_weight, product_classification, expected_dispatch, contents, unit_value, value, } = req.body;
     const { email } = req.body.user;
     console.log("expected_dispatch", expected_dispatch);
-    createShipment_1.default()
+    createShipment_1.default(req.body)
         .then((response) => {
         //@ts-ignore
         console.log("address", response.data);
