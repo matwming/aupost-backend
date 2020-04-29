@@ -46,6 +46,7 @@ export const saveAddress = async (req: Request, res: Response) => {
     unit_value,
     value,
   } = req.body;
+    const { email } = req.body.user;
   console.log("expected_dispatch", expected_dispatch);
   createShipment()
     .then((response: AxiosResponse | void) => {
@@ -57,8 +58,8 @@ export const saveAddress = async (req: Request, res: Response) => {
         const { shipment_id } = response.data.shipments[0];
         console.log("shipment_id", shipment_id);
         pool.query(
-          `insert into shippments (charge_code,deliver_to,country,residence,detail_address,phone,consignment_weight,product_id,expected_dispatch,contents,unit_value,value,shipment_id) 
-         values("${charge_code}","${deliver_to}","${country}","${residence}","${address}","${phone}","${consignment_weight}","${product_classification}","${expected_dispatch}","${contents}","${unit_value}","${value}","${shipment_id}")`,
+          `insert into shipments (charge_code,deliver_to,country,residence,detail_address,phone,consignment_weight,product_id,expected_dispatch,contents,unit_value,value,shipment_id,sender_email) 
+         values("${charge_code}","${deliver_to}","${country}","${residence}","${address}","${phone}","${consignment_weight}","${product_classification}","${expected_dispatch}","${contents}","${unit_value}","${value}","${shipment_id}","${email}")`,
           async (err, result, fields) => {
             if (err) {
               console.log("insert into shippments has errors", err);

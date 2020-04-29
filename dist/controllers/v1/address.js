@@ -29,6 +29,7 @@ exports.saveAddress = async (req, res) => {
         return res.status(400).json({ errors: errors.array() });
     }
     const { charge_code, deliver_to, country, residence, address, phone, consignment_weight, product_classification, expected_dispatch, contents, unit_value, value, } = req.body;
+    const { email } = req.body.user;
     console.log("expected_dispatch", expected_dispatch);
     createShipment_1.default()
         .then((response) => {
@@ -39,8 +40,8 @@ exports.saveAddress = async (req, res) => {
             //@ts-ignore
             const { shipment_id } = response.data.shipments[0];
             console.log("shipment_id", shipment_id);
-            app_1.pool.query(`insert into shippments (charge_code,deliver_to,country,residence,detail_address,phone,consignment_weight,product_id,expected_dispatch,contents,unit_value,value,shipment_id) 
-         values("${charge_code}","${deliver_to}","${country}","${residence}","${address}","${phone}","${consignment_weight}","${product_classification}","${expected_dispatch}","${contents}","${unit_value}","${value}","${shipment_id}")`, async (err, result, fields) => {
+            app_1.pool.query(`insert into shipments (charge_code,deliver_to,country,residence,detail_address,phone,consignment_weight,product_id,expected_dispatch,contents,unit_value,value,shipment_id,sender_email) 
+         values("${charge_code}","${deliver_to}","${country}","${residence}","${address}","${phone}","${consignment_weight}","${product_classification}","${expected_dispatch}","${contents}","${unit_value}","${value}","${shipment_id}","${email}")`, async (err, result, fields) => {
                 if (err) {
                     console.log("insert into shippments has errors", err);
                     return;

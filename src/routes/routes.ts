@@ -8,6 +8,7 @@ import {
 } from "../utils/validation";
 import handleAuth from "../middleware/auth";
 import {getAddress,saveAddress} from "../controllers/v1/address";
+import getShipment from "../controllers/v1/shipment";
 
 const router = Router();
 const currentAPIversion = "v1";
@@ -19,8 +20,9 @@ const currentAPIversion = "v1";
  * @access Public
  */
 router.get("/", (req: Request, res: Response) =>
-  res.send("<h1>MERN Project API</h1>")
+  res.send("<h1>MERN Project API is working</h1>")
 );
+
 /**
  * @method Post
  * @header api_key
@@ -68,5 +70,6 @@ router.get(`/api/address/me`, handleAuth, getAddress);
 
 router.post(`/api/v1/save-address`, handleAuth, saveAddress);
 
+router.get('/api/v1/get-shipment',handleAuth,getShipment);
 
 export default router;

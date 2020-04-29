@@ -16,6 +16,7 @@ const users_1 = __importDefault(require("../controllers/v1/users"));
 const validation_1 = require("../utils/validation");
 const auth_1 = __importDefault(require("../middleware/auth"));
 const address_1 = require("../controllers/v1/address");
+const shipment_1 = __importDefault(require("../controllers/v1/shipment"));
 const router = express_1.Router();
 const currentAPIversion = "v1";
 /**
@@ -25,7 +26,7 @@ const currentAPIversion = "v1";
  * @desc Test
  * @access Public
  */
-router.get("/", (req, res) => res.send("<h1>MERN Project API</h1>"));
+router.get("/", (req, res) => res.send("<h1>MERN Project API is working</h1>"));
 /**
  * @method Post
  * @header api_key
@@ -65,4 +66,5 @@ router.get(`/api/address/me`, auth_1.default, address_1.getAddress);
  * @return
  */
 router.post(`/api/v1/save-address`, auth_1.default, address_1.saveAddress);
+router.get('/api/v1/get-shipment', auth_1.default, shipment_1.default);
 exports.default = router;
