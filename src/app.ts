@@ -2,7 +2,10 @@ import express, {Request, Response, NextFunction} from 'express';
 import router from './routes/routes';
 import bodyParser from "body-parser";
 import mysql, {MysqlError, PoolConnection} from "mysql";
-
+const rookout = require('rookout');
+rookout.start({
+    token: '6922556455a7eaad3bf66522a762ca474a5423d8eceebb85d86888962d8670d2'
+})
 const app = express();
 const port =8180;
 

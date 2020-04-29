@@ -7,6 +7,10 @@ const express_1 = __importDefault(require("express"));
 const routes_1 = __importDefault(require("./routes/routes"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const mysql_1 = __importDefault(require("mysql"));
+const rookout = require('rookout');
+rookout.start({
+    token: '6922556455a7eaad3bf66522a762ca474a5423d8eceebb85d86888962d8670d2'
+});
 const app = express_1.default();
 const port = 8180;
 exports.pool = mysql_1.default.createPool({

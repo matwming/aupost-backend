@@ -1,7 +1,11 @@
 "use strict";
+var __importDefault = (this && this.__importDefault) || function (mod) {
+    return (mod && mod.__esModule) ? mod : { "default": mod };
+};
 Object.defineProperty(exports, "__esModule", { value: true });
 const express_validator_1 = require("express-validator");
 const app_1 = require("../../app");
+const createShipment_1 = __importDefault(require("../aupost/v1/ShippingAndTracking/createShipment"));
 exports.getAddress = async (req, res) => {
     const errors = express_validator_1.validationResult(req);
     if (!errors.isEmpty()) {
@@ -26,20 +30,38 @@ exports.saveAddress = async (req, res) => {
     }
     const { charge_code, deliver_to, country, residence, address, phone, consignment_weight, product_classification, expected_dispatch, contents, unit_value, value, } = req.body;
     console.log("expected_dispatch", expected_dispatch);
-    app_1.pool.query(`insert into shippments (charge_code,deliver_to,country,residence,detail_address,phone,consignment_weight,product_id,expected_dispatch,contents,unit_value,value) 
-         values("${charge_code}","${deliver_to}","${country}","${residence}","${address}","${phone}","${consignment_weight}","${product_classification}","${expected_dispatch}","${contents}","${unit_value}","${value}")`, async (err, result, fields) => {
-        if (err) {
-            console.log("insert into shippments has errors", err);
-            return;
+    createShipment_1.default()
+        .then((response) => {
+        //@ts-ignore
+        console.log("address", response.data);
+        //@ts-ignore
+        if (response.status === 200 || 201) {
+            //@ts-ignore
+            const { shipment_id } = response.data.shipments[0];
+            console.log("shipment_id", shipment_id);
+            app_1.pool.query(`insert into shippments (charge_code,deliver_to,country,residence,detail_address,phone,consignment_weight,product_id,expected_dispatch,contents,unit_value,value,shipment_id) 
+         values("${charge_code}","${deliver_to}","${country}","${residence}","${address}","${phone}","${consignment_weight}","${product_classification}","${expected_dispatch}","${contents}","${unit_value}","${value}","${shipment_id}")`, async (err, result, fields) => {
+                if (err) {
+                    console.log("insert into shippments has errors", err);
+                    return;
+                }
+                console.log(result);
+                if (result.hasOwnProperty("affectedRows")) {
+                    return (result["affectedRows"] === 1 &&
+                        res.json({
+                            msg: "successfully created a shippment.",
+                            success: true,
+                            shipment_id: shipment_id,
+                        }));
+                }
+            });
         }
-        console.log(result);
-        if (result.hasOwnProperty("affectedRows")) {
-            return (result["affectedRows"] === 1 &&
-                res.json({ msg: "successfully created a shippment.", success: true }));
-        }
+    })
+        .catch((e) => {
+        console.log("an error in address file", e.message);
         return res.json({
-            msg: "failed to create a shippment, please try again.",
-            success: false
+            msg: "An error occurred.Please try again later",
+            success: false,
         });
     });
 };
