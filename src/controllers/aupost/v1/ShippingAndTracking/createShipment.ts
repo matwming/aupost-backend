@@ -2,17 +2,17 @@ import { Request, Response } from "express";
 import { HttpRequest } from "../../../../config/config";
 import {AxiosResponse} from "axios";
 
-const createShipment = (shipmentInfo) => {
+const createShipment = (shipmentInfo:any) => {
   const {
-    charge_code,
     deliver_to,
     country,
     residence,
     address,
+      province,
+      city,
+      district,
     phone,
     consignment_weight,
-    product_classification,
-    expected_dispatch,
     contents,
     unit_value,
     value,
@@ -33,12 +33,12 @@ const createShipment = (shipmentInfo) => {
           "state": "VIC"
         },
         to: {
-          name: deliver_to,
+          name: `a${deliver_to}`,
           business_name: "Test",
           lines: [address],
-          suburb: residence[2],
-          state: residence[1],
-          country: country,
+          suburb: district,
+          state: province,
+          country: 'China',
           postcode: "100000",
           phone: phone,
           email: "carl@gmai.co",
@@ -53,7 +53,7 @@ const createShipment = (shipmentInfo) => {
             item_reference: "blocked",
             product_id: "PTI8",
             commercial_value: false,
-            classification_type: product_classification,
+            classification_type: 'gift',
             description_of_other: "A pair of shoes",
 
             item_contents: [

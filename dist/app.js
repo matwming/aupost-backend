@@ -14,7 +14,7 @@ rookout.start({
 const app = express_1.default();
 const port = 8180;
 exports.pool = mysql_1.default.createPool({
-    host: '13.70.105.218',
+    host: '13.75.232.156',
     port: 3306,
     user: 'root',
     password: 'Zhaoying@8604',

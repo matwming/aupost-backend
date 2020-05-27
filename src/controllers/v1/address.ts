@@ -36,55 +36,53 @@ export const saveAddress = async (req: Request, res: Response) => {
     charge_code,
     deliver_to,
     country,
-    residence,
+    province,
     address,
     phone,
+      city,
     consignment_weight,
     product_classification,
-    expected_dispatch,
     contents,
-    unit_value,
     value,
   } = req.body;
+  console.log('body',req.body);
     const { email } = req.body.user;
-  console.log("expected_dispatch", expected_dispatch);
-  createShipment(req.body)
-    .then((response: AxiosResponse | void) => {
-      //@ts-ignore
-      console.log("address", response.data);
-      //@ts-ignore
-      if (response.status === 200||201) {
-        //@ts-ignore
-        const { shipment_id } = response.data.shipments[0];
-        console.log("shipment_id", shipment_id);
-        pool.query(
-          `insert into shipments (charge_code,deliver_to,country,residence,detail_address,phone,consignment_weight,product_id,expected_dispatch,contents,unit_value,value,shipment_id,sender_email) 
-         values("${charge_code}","${deliver_to}","${country}","${residence}","${address}","${phone}","${consignment_weight}","${product_classification}","${expected_dispatch}","${contents}","${unit_value}","${value}","${shipment_id}","${email}")`,
-          async (err, result, fields) => {
-            if (err) {
-              console.log("insert into shippments has errors", err);
-              return;
-            }
-            console.log(result);
-            if (result.hasOwnProperty("affectedRows")) {
-              return (
-                result["affectedRows"] === 1 &&
-                res.json({
-                  msg: "successfully created a shippment.",
-                  success: true,
-                  shipment_id: shipment_id,
-                })
-              );
-            }
-          }
-        );
+  pool.query(
+      `insert into shipments (charge_code,deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city) 
+         values("${charge_code}","${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_classification}","${contents}","${value}","","${email}","${city}")`,
+      async (err, result, fields) => {
+        if (err) {
+          console.log("insert into shippments has errors", err);
+          return;
+        }
+        console.log(result);
+        if (result.hasOwnProperty("affectedRows")) {
+          return (
+              result["affectedRows"] === 1 &&
+              res.json({
+                msg: "successfully created a shipment.",
+                success: true,
+              })
+          );
+        }
       }
-    })
-    .catch((e) => {
-      console.log("an error in address file", e.message);
-      return res.json({
-        msg: "An error occurred.Please try again later",
-        success: false,
-      });
-    });
+  );
+  // createShipment(req.body)
+  //   .then((response: AxiosResponse | void) => {
+  //     //@ts-ignore
+  //     console.log("address", response.data);
+  //     //@ts-ignore
+  //     if (response.status === 200||201) {
+  //       //@ts-ignore
+  //       const { shipment_id } = response.data.shipments[0];
+  //       console.log("shipment_id", shipment_id);
+  //     }
+  //   })
+  //   .catch((e) => {
+  //     console.log("an error in address file", e.message);
+  //     return res.json({
+  //       msg: "An error occurred.Please try again later",
+  //       success: false,
+  //     });
+  //   });
 };

@@ -10,7 +10,7 @@ const app = express();
 const port =8180;
 
 export const pool=mysql.createPool({
-    host:'13.70.105.218',
+    host:'13.75.232.156',
     port:3306,
     user:'root',
     password:'Zhaoying@8604',
