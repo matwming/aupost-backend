@@ -8,7 +8,8 @@ import {
 } from "../utils/validation";
 import handleAuth from "../middleware/auth";
 import {getAddress,saveAddress} from "../controllers/v1/address";
-import getShipment from "../controllers/v1/shipment";
+import getShipment, {createAuShipment} from "../controllers/v1/shipment";
+import labelService from "../controllers/v1/label";
 
 const router = Router();
 const currentAPIversion = "v1";
@@ -72,4 +73,7 @@ router.post(`/api/v1/save-address`, handleAuth, saveAddress);
 
 router.get('/api/v1/get-shipment',handleAuth,getShipment);
 
+router.post('/api/v1/create-aushipment',handleAuth,createAuShipment);
+
+router.post('/api/v1/create-label',handleAuth,labelService)
 export default router;
