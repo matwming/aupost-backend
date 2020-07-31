@@ -3,6 +3,7 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.pool = void 0;
 const express_1 = __importDefault(require("express"));
 const routes_1 = __importDefault(require("./routes/routes"));
 const body_parser_1 = __importDefault(require("body-parser"));
@@ -13,8 +14,15 @@ rookout.start({
 });
 const app = express_1.default();
 const port = 8180;
+// export const pool=mysql.createPool({
+//     host:'13.75.232.156',
+//     port:3306,
+//     user:'root',
+//     password:'Zhaoying@8604',
+//     database:'aupost_project'
+// });
 exports.pool = mysql_1.default.createPool({
-    host: '13.75.232.156',
+    host: '127.0.0.1',
     port: 3306,
     user: 'root',
     password: 'Zhaoying@8604',

@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.saveAddress = exports.getAddress = void 0;
 const express_validator_1 = require("express-validator");
 const app_1 = require("../../app");
 exports.getAddress = async (req, res) => {

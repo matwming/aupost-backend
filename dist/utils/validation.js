@@ -1,5 +1,6 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
+exports.validationUpdateEducation = exports.validationUpdateProfile = exports.validationProfile = exports.validationLogin = exports.validation = void 0;
 const express_validator_1 = require("express-validator");
 exports.validation = () => {
     return [

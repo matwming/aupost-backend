@@ -12,6 +12,7 @@
   "author": "",
   "license": "ISC",
   "dependencies": {
+    "@mysql/xdevapi": "^8.0.21",
     "@types/bcryptjs": "^2.4.2",
     "@types/config": "0.0.36",
     "@types/gravatar": "^1.8.1",

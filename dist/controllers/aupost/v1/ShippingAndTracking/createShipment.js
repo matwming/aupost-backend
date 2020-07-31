@@ -1,16 +1,19 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../../../../config/config");
-const createShipment = (shipmentInfo) => {
-    const { deliver_to, residence, address, province, city, district, phone, consignment_weight, contents, value, } = shipmentInfo;
-    const body = {
-        shipments: [
+const app_1 = require("../../../../app");
+const createShipment = (req, response) => {
+    const { charge_code, deliver_to, country, province, address, phone, city, consignment_weight, contents, value, district, product_id } = req.body;
+    console.log('create-aushipment', req.body);
+    const { email } = req.body.user;
+    const shipmentData = {
+        "shipments": [
             {
                 "shipment_reference": "My second shipment ref",
                 "customer_reference_1": "cb1234",
                 "customer_reference_2": "cb2345",
                 "from": {
-                    "name": "Christy Chen1",
+                    "name": "Lynn",
                     "lines": [
                         "420 Station Street"
                     ],
@@ -19,49 +22,75 @@ const createShipment = (shipmentInfo) => {
                     "state": "VIC"
                 },
                 "to": {
-                    "name": "a113",
-                    "business_name": "Test",
+                    "name": `${deliver_to}`,
+                    "business_name": "",
                     "lines": [
-                        "Test"
+                        `${address}`
                     ],
-                    "suburb": "Shanghai",
-                    "state": "Shanghai",
+                    "suburb": `${district}`,
+                    "state": `${province}`,
                     "country": "CN",
-                    "postcode": "100000",
-                    "phone": "13900008888",
-                    "email": "carl@gmai.co",
+                    "postcode": `1000`,
+                    "phone": `${phone}`,
+                    "email": `${email}`,
                     "delivery_instructions": "NA"
                 },
                 "items": [
                     {
-                        "length": "10",
-                        "height": "10",
-                        "width": "10",
-                        "weight": "1",
+                        "length": "",
+                        "height": "",
+                        "width": "",
+                        "weight": `${consignment_weight}`,
                         "item_reference": "blocked",
-                        "product_id": "PTI8",
+                        "product_id": "ECM8",
                         "commercial_value": false,
                         "classification_type": "GIFT",
-                        "description_of_other": "A pair of shoes",
+                        "description_of_other": `${contents}`,
                         "item_contents": [
                             {
-                                "description": "Some stuff",
+                                "description": `${contents}`,
                                 "quantity": 1,
                                 "value": 1.23,
-                                "tariff_code": 123456,
                                 "country_of_origin": "AU",
-                                "weight": 0.34
                             }
                         ]
                     }
                 ]
-            },
-        ],
+            }
+        ]
     };
-    return config_1.HttpRequest.post("https://digitalapi.auspost.com.au/test/shipping/v1/shipments", { ...body })
-        .then((res) => {
+    config_1.HttpRequest.post("https://digitalapi.auspost.com.au/test/shipping/v1/shipments", { ...shipmentData })
+        .then(async (res) => {
         console.log("createShipment", res.data);
-        return res.data;
+        const shipmentCreatedResponse = res.data.shipments;
+        for await (const shipmentRes of shipmentCreatedResponse) {
+            app_1.pool.query(`insert into shipments (charge_code,deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city,create_date) 
+         values("${charge_code}","${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_id}","${contents}","${value}","${shipmentRes.shipment_id}","${email}","${city}","${shipmentRes.shipment_creation_date}");`, async (err, result, fields) => {
+                if (err) {
+                    console.log("insert into shippments has errors", err);
+                    return;
+                }
+                console.log(result);
+                if (result.hasOwnProperty("affectedRows")) {
+                    for await (const singleItem of shipmentRes.items) {
+                        const { item_id, weight, item_reference, tracking_details, product_id, item_summary } = singleItem;
+                        app_1.pool.query(`insert into items (item_id, shipment_id,weight,item_reference, tracking_details_consignment_id,product_id,total_cost,status,contents) values ("${item_id}","${shipmentRes.shipment_id}","${weight}","${item_reference}","${tracking_details.consignment_id}","${product_id}","${item_summary.total_cost}","${item_summary.status}","")`, (err, result) => {
+                            if (err) {
+                                console.log('insert into items has errors', err);
+                                return;
+                            }
+                            if (result.hasOwnProperty('affectedRows')) {
+                                result["affectedRows"] === 1 &&
+                                    response.json({
+                                        msg: "successfully created a shipment.",
+                                        success: true,
+                                    });
+                            }
+                        });
+                    }
+                }
+            });
+        }
     })
         .catch((e) => {
         console.log(e);

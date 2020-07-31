@@ -1,6 +1,7 @@
 import {Response,Request} from "express";
 import {pool} from "../../app";
 import createShipment from "../aupost/v1/ShippingAndTracking/createShipment";
+import {validationResult} from "express-validator";
 
 const getShipment=(req:Request,res:Response)=>{
     console.log('getting shipments...')
@@ -13,14 +14,19 @@ const getShipment=(req:Request,res:Response)=>{
         }
         console.log('results',results);
         if(results.length===0){
-            return res.json({msg:`No shipment is found for user ${email}`,success:true});
+            return res.json({msg:`No shipment is found for user ${email}`,success:true,results:[]});
         }
         return res.json({success:true,results:results})
     })
 };
 
-export const createAuShipment=(req:Request,res:Response)=>{
-    createShipment(req.body).then(response=>{
+export const createAuShipment=async (req:Request,res:Response)=>{
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+        return res.status(400).json({ errors: errors.array() });
+    }
+    // @ts-ignore
+   await createShipment(req,res).then(response=>{
         console.log('shipments_create',response)
         return res.send(response);
     }).catch((e:Error)=>{
