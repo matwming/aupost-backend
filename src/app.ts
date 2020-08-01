@@ -3,6 +3,8 @@ import router from './routes/routes';
 import bodyParser from "body-parser";
 import mysql, {MysqlError, PoolConnection} from "mysql";
 const rookout = require('rookout');
+import cors from 'cors';
+
 rookout.start({
     token: '6922556455a7eaad3bf66522a762ca474a5423d8eceebb85d86888962d8670d2'
 })
@@ -31,6 +33,8 @@ pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
     console.log('successfully connected to aupost_project');
     connection.release();
 });
+
+app.use(cors());
 /*
 * middleware to parse body content
 * */
