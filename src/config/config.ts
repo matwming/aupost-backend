@@ -10,7 +10,7 @@ const HttpRequestHeader={
 }
 export const HttpRequest = axios.create({
     baseURL: API_Endpoint,
-    timeout: 6000,
+    timeout: 10000,
     headers: {...HttpRequestHeader}
 });
 

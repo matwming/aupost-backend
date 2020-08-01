@@ -1,7 +1,7 @@
 "use strict";
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../../../../config/config");
-const createLabel = () => {
+const createLabel = async (shipmentId, itemId) => {
     const body = {
         wait_for_label_url: true,
         preferences: [
@@ -21,22 +21,17 @@ const createLabel = () => {
         ],
         shipments: [
             {
-                shipment_id: "b98K0E7CW.UAAAFxdQghEb8Y",
+                shipment_id: `${shipmentId}`,
                 items: [
                     {
-                        item_id: "RmQK0E7COHsAAAFxdwghEb8Y",
+                        item_id: `${itemId}`,
                     },
                 ],
             },
         ],
     };
-    return config_1.HttpRequest.post("https://digitalapi.auspost.com.au/test/shipping/v1/labels", { ...body })
-        .then((res) => {
-        console.log("createLabel", res.data);
-        return res;
-    })
-        .catch((e) => {
-        console.log(e);
-    });
+    let res = await config_1.HttpRequest.post("https://digitalapi.auspost.com.au/test/shipping/v1/labels", { ...body });
+    console.log("createLabel", res.data.labels);
+    return res.data.labels;
 };
 exports.default = createLabel;

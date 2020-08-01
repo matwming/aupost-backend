@@ -9,6 +9,7 @@ const routes_1 = __importDefault(require("./routes/routes"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const mysql_1 = __importDefault(require("mysql"));
 const rookout = require('rookout');
+// @ts-ignore
 const cors_1 = __importDefault(require("cors"));
 rookout.start({
     token: '6922556455a7eaad3bf66522a762ca474a5423d8eceebb85d86888962d8670d2'
