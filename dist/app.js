@@ -50,4 +50,4 @@ app.use('/', routes_1.default);
 app.use((err, req, res, next) => {
     res.json({ error: err.message, msg: 'unhandled routes' });
 });
-app.listen(port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`));
