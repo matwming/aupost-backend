@@ -2,7 +2,7 @@
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../../../../config/config");
 const app_1 = require("../../../../app");
-const createShipment = (req, response) => {
+const createShipment = async (req, response) => {
     const { charge_code, deliver_to, country, province, address, phone, city, consignment_weight, contents, value, district, product_id } = req.body;
     console.log('create-aushipment', req.body);
     const { email } = req.body.user;
@@ -59,13 +59,13 @@ const createShipment = (req, response) => {
             }
         ]
     };
-    config_1.HttpRequest.post("https://digitalapi.auspost.com.au/test/shipping/v1/shipments", { ...shipmentData })
-        .then(async (res) => {
-        console.log("createShipment", res.data);
-        const shipmentCreatedResponse = res.data.shipments;
-        for await (const shipmentRes of shipmentCreatedResponse) {
-            app_1.pool.query(`insert into shipments (charge_code,deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city,create_date) 
+    let res = await config_1.HttpRequest.post("https://digitalapi.auspost.com.au/test/shipping/v1/shipments", { ...shipmentData });
+    console.log("createShipment", res.data);
+    const shipmentCreatedResponse = res.data.shipments;
+    for await (const shipmentRes of shipmentCreatedResponse) {
+        app_1.pool.query(`insert into shipments (charge_code,deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city,create_date) 
          values("${charge_code}","${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_id}","${contents}","${value}","${shipmentRes.shipment_id}","${email}","${city}","${shipmentRes.shipment_creation_date}");`, async (err, result, fields) => {
+            try {
                 if (err) {
                     console.log("insert into shippments has errors", err);
                     return;
@@ -80,7 +80,7 @@ const createShipment = (req, response) => {
                                 return;
                             }
                             if (result.hasOwnProperty('affectedRows')) {
-                                result["affectedRows"] === 1 &&
+                                return result["affectedRows"] === 1 &&
                                     response.json({
                                         msg: "successfully created a shipment.",
                                         success: true,
@@ -89,11 +89,11 @@ const createShipment = (req, response) => {
                         });
                     }
                 }
-            });
-        }
-    })
-        .catch((e) => {
-        console.log(e);
-    });
+            }
+            catch (e) {
+                console.log('create shipment error', e);
+            }
+        });
+    }
 };
 exports.default = createShipment;

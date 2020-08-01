@@ -30,6 +30,7 @@ const auth_1 = __importDefault(require("../middleware/auth"));
 const address_1 = require("../controllers/v1/address");
 const shipment_1 = __importStar(require("../controllers/v1/shipment"));
 const label_1 = __importDefault(require("../controllers/v1/label"));
+const order_1 = __importDefault(require("../controllers/v1/order"));
 const router = express_1.Router();
 const currentAPIversion = "v1";
 /**
@@ -82,4 +83,12 @@ router.post(`/api/v1/save-address`, auth_1.default, address_1.saveAddress);
 router.get('/api/v1/get-shipment', auth_1.default, shipment_1.default);
 router.post('/api/v1/create-aushipment', auth_1.default, shipment_1.createAuShipment);
 router.post('/api/v1/create-label', auth_1.default, label_1.default);
+/**
+ * @method put
+ * @param shipment id:string
+ * @desc call aupost api to create an order
+ * @access Private
+ * @return order info
+ */
+router.put('/api/v1/create-order', auth_1.default, order_1.default);
 exports.default = router;
