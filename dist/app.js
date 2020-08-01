@@ -9,6 +9,7 @@ const routes_1 = __importDefault(require("./routes/routes"));
 const body_parser_1 = __importDefault(require("body-parser"));
 const mysql_1 = __importDefault(require("mysql"));
 const rookout = require('rookout');
+const cors_1 = __importDefault(require("cors"));
 rookout.start({
     token: '6922556455a7eaad3bf66522a762ca474a5423d8eceebb85d86888962d8670d2'
 });
@@ -36,6 +37,7 @@ exports.pool.getConnection((err, connection) => {
     console.log('successfully connected to aupost_project');
     connection.release();
 });
+app.use(cors_1.default());
 /*
 * middleware to parse body content
 * */
