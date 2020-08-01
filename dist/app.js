@@ -14,20 +14,20 @@ rookout.start({
 });
 const app = express_1.default();
 const port = 8180;
-// export const pool=mysql.createPool({
-//     host:'13.75.232.156',
-//     port:3306,
-//     user:'root',
-//     password:'Zhaoying@8604',
-//     database:'aupost_project'
-// });
 exports.pool = mysql_1.default.createPool({
-    host: '127.0.0.1',
+    host: '13.75.232.156',
     port: 3306,
     user: 'root',
     password: 'Zhaoying@8604',
     database: 'aupost_project'
 });
+// export const pool = mysql.createPool({
+//     host:'127.0.0.1',
+//     port:3306,
+//     user:'root',
+//     password:'Zhaoying@8604',
+//     database:'aupost_project'
+// });
 exports.pool.getConnection((err, connection) => {
     if (err) {
         console.error('error connecting: ', err.stack);
