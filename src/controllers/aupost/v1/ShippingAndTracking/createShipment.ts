@@ -76,7 +76,7 @@ const createShipment = (req: any, response: Response) => {
             }
         ]
     }
-     HttpRequest.post(
+    HttpRequest.post(
         "https://digitalapi.auspost.com.au/test/shipping/v1/shipments",
         {...shipmentData}
     )
@@ -97,11 +97,11 @@ const createShipment = (req: any, response: Response) => {
                             for await (const singleItem of shipmentRes.items) {
                                 const {item_id, weight, item_reference, tracking_details, product_id, item_summary} = singleItem;
                                 pool.query(`insert into items (item_id, shipment_id,weight,item_reference, tracking_details_consignment_id,product_id,total_cost,status,contents) values ("${item_id}","${shipmentRes.shipment_id}","${weight}","${item_reference}","${tracking_details.consignment_id}","${product_id}","${item_summary.total_cost}","${item_summary.status}","")`, (err, result) => {
-                                    if(err){
-                                        console.log('insert into items has errors',err);
+                                    if (err) {
+                                        console.log('insert into items has errors', err);
                                         return;
                                     }
-                                    if(result.hasOwnProperty('affectedRows')){
+                                    if (result.hasOwnProperty('affectedRows')) {
                                         result["affectedRows"] === 1 &&
                                         response.json({
                                             msg: "successfully created a shipment.",
