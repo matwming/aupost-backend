@@ -33,6 +33,7 @@ const label_1 = __importDefault(require("../controllers/v1/label"));
 const order_1 = __importDefault(require("../controllers/v1/order"));
 const getOrder_1 = __importDefault(require("../controllers/v1/order/getOrder"));
 const getOrderSummary_1 = __importDefault(require("../controllers/aupost/v1/ShippingAndTracking/getOrderSummary"));
+const deleteShipment_1 = __importDefault(require("../controllers/v1/shipment/deleteShipment"));
 const router = express_1.Router();
 const currentAPIversion = "v1";
 /**
@@ -95,4 +96,5 @@ router.post('/api/v1/create-label', auth_1.default, label_1.default);
 router.put('/api/v1/create-order', auth_1.default, order_1.default);
 router.get('/api/v1/get-orders', auth_1.default, getOrder_1.default);
 router.get('/api/v1/get-order-summary/:orderId', auth_1.default, getOrderSummary_1.default);
+router.delete('/api/v1/delete-shipment/:shipmentId', auth_1.default, deleteShipment_1.default);
 exports.default = router;
