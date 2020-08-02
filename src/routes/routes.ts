@@ -11,6 +11,8 @@ import {getAddress,saveAddress} from "../controllers/v1/address";
 import getShipment, {createAuShipment} from "../controllers/v1/shipment";
 import labelService from "../controllers/v1/label";
 import orderService from "../controllers/v1/order";
+import getOrder from "../controllers/v1/order/getOrder";
+import getOrderSummary from "../controllers/aupost/v1/ShippingAndTracking/getOrderSummary";
 
 const router = Router();
 const currentAPIversion = "v1";
@@ -86,5 +88,9 @@ router.post('/api/v1/create-label',handleAuth,labelService);
  * @return order info
  */
 router.put('/api/v1/create-order',handleAuth,orderService);
+
+router.get('/api/v1/get-orders',handleAuth,getOrder);
+
+router.get('/api/v1/get-order-summary/:orderId',handleAuth,getOrderSummary);
 
 export default router;

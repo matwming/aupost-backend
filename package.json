@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/app.js",
-    "server": "nodemon dist/app.js"
+    "server": "tsc -w && nodemon dist/app.js"
   },
   "keywords": [],
   "author": "",
@@ -30,7 +30,8 @@
     "jsonwebtoken": "^8.5.1",
     "mongoose": "^5.9.9",
     "mysql": "^2.18.1",
-    "rookout": "^0.1.89"
+    "rookout": "^0.1.89",
+    "stream-to-blob": "^2.0.1"
   },
   "devDependencies": {
     "@types/express": "^4.17.2",
