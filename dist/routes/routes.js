@@ -33,6 +33,7 @@ const label_1 = __importDefault(require("../controllers/v1/label"));
 const order_1 = __importDefault(require("../controllers/v1/order"));
 const getOrder_1 = __importDefault(require("../controllers/v1/order/getOrder"));
 const getOrderSummary_1 = __importDefault(require("../controllers/aupost/v1/ShippingAndTracking/getOrderSummary"));
+// @ts-ignore
 const deleteShipment_1 = __importDefault(require("../controllers/v1/shipment/deleteShipment"));
 const router = express_1.Router();
 const currentAPIversion = "v1";
