@@ -13,6 +13,7 @@ import labelService from "../controllers/v1/label";
 import orderService from "../controllers/v1/order";
 import getOrder from "../controllers/v1/order/getOrder";
 import getOrderSummary from "../controllers/aupost/v1/ShippingAndTracking/getOrderSummary";
+// @ts-ignore
 import deleteShipment from "../controllers/v1/shipment/deleteShipment";
 
 const router = Router();
