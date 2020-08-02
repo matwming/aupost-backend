@@ -5,12 +5,13 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const config_1 = require("../../../../config/config");
 const fs_1 = __importDefault(require("fs"));
+const path_1 = __importDefault(require("path"));
 const getOrderSummary = async (req, res) => {
     const { orderId } = req.params;
     if (orderId === undefined) {
         return res.json({ msg: 'Please provide a valid order id', success: false });
     }
-    let tempFilePath = process.cwd() + 'ordersummary.pdf';
+    let tempFilePath = path_1.default.join(process.cwd(), 'ordersummary.pdf');
     console.log('tempFilePath', tempFilePath);
     let file = fs_1.default.createWriteStream(tempFilePath);
     let stream = await config_1.HttpRequest({

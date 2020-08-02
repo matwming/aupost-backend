@@ -2,14 +2,14 @@ import {Request, Response} from "express";
 import {HttpRequest} from "../../../../config/config";
 import {AxiosResponse} from "axios";
 import fs from 'fs';
-
+import path from 'path';
 
 const getOrderSummary = async (req: Request, res: Response) => {
     const {orderId} = req.params;
     if (orderId === undefined) {
         return res.json({msg: 'Please provide a valid order id', success: false});
     }
-    let tempFilePath = process.cwd() + 'ordersummary.pdf';
+    let tempFilePath = path.join(process.cwd(),'ordersummary.pdf');
     console.log('tempFilePath',tempFilePath);
     let file=fs.createWriteStream(tempFilePath);
     let stream:AxiosResponse =  await HttpRequest({
