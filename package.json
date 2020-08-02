@@ -6,7 +6,7 @@
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "node dist/app.js",
-    "server": "tsc -w && nodemon dist/app.js"
+    "server": "nodemon dist/app.js"
   },
   "keywords": [],
   "author": "",

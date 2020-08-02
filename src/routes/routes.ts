@@ -1,18 +1,19 @@
-import { Router, Response, Request } from "express";
+import {Router, Response, Request} from "express";
 import * as auth from "../controllers/v1/auth";
 import users from "../controllers/v1/users";
 import {
-  validation,
-  validationLogin,
-  validationProfile, validationUpdateEducation, validationUpdateProfile,
+    validation,
+    validationLogin,
+    validationProfile, validationUpdateEducation, validationUpdateProfile,
 } from "../utils/validation";
 import handleAuth from "../middleware/auth";
-import {getAddress,saveAddress} from "../controllers/v1/address";
+import {getAddress, saveAddress} from "../controllers/v1/address";
 import getShipment, {createAuShipment} from "../controllers/v1/shipment";
 import labelService from "../controllers/v1/label";
 import orderService from "../controllers/v1/order";
 import getOrder from "../controllers/v1/order/getOrder";
 import getOrderSummary from "../controllers/aupost/v1/ShippingAndTracking/getOrderSummary";
+import deleteShipment from "../controllers/v1/shipment/deleteShipment";
 
 const router = Router();
 const currentAPIversion = "v1";
@@ -24,7 +25,7 @@ const currentAPIversion = "v1";
  * @access Public
  */
 router.get("/", (req: Request, res: Response) =>
-  res.send("<h1>MERN Project API is working</h1>")
+    res.send("<h1>MERN Project API is working</h1>")
 );
 
 /**
@@ -74,11 +75,11 @@ router.get(`/api/address/me`, handleAuth, getAddress);
 
 router.post(`/api/v1/save-address`, handleAuth, saveAddress);
 
-router.get('/api/v1/get-shipment',handleAuth,getShipment);
+router.get('/api/v1/get-shipment', handleAuth, getShipment);
 
-router.post('/api/v1/create-aushipment',handleAuth,createAuShipment);
+router.post('/api/v1/create-aushipment', handleAuth, createAuShipment);
 
-router.post('/api/v1/create-label',handleAuth,labelService);
+router.post('/api/v1/create-label', handleAuth, labelService);
 
 /**
  * @method put
@@ -87,10 +88,11 @@ router.post('/api/v1/create-label',handleAuth,labelService);
  * @access Private
  * @return order info
  */
-router.put('/api/v1/create-order',handleAuth,orderService);
+router.put('/api/v1/create-order', handleAuth, orderService);
 
-router.get('/api/v1/get-orders',handleAuth,getOrder);
+router.get('/api/v1/get-orders', handleAuth, getOrder);
 
-router.get('/api/v1/get-order-summary/:orderId',handleAuth,getOrderSummary);
+router.get('/api/v1/get-order-summary/:orderId', handleAuth, getOrderSummary);
 
+router.delete('/api/v1/delete-shipment/:shipmentId', handleAuth, deleteShipment);
 export default router;
