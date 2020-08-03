@@ -20,6 +20,7 @@ const orderService = async (req, res) => {
         payment_method: 'CHARGE_TO_ACCOUNT',
         shipments: shipmentsToSendForOrder
     };
+    console.log('order info', orderInfo);
     try {
         let response = await config_1.HttpRequest.put('https://digitalapi.auspost.com.au/test/shipping/v1/orders', { ...orderInfo });
         if ((_a = response.data) === null || _a === void 0 ? void 0 : _a.order) {
@@ -31,15 +32,25 @@ const orderService = async (req, res) => {
                     return res.send(err);
                 }
                 if ((result === null || result === void 0 ? void 0 : result['affectedRows']) === 1) {
+                    let ordersSuccess = [];
+                    const numberOfShipments = response.data.order.shipments.length;
                     for await (let shipment of response.data.order.shipments) {
-                        app_1.pool.query(`update shipments set order_id = "${order_id}" where shipment_id = "${shipment.shipment_id}"`, (err, result) => {
+                        app_1.pool.query(`update shipments set order_id = "${order_id}" where shipment_id = "${shipment.shipment_id}"`, async (err, result) => {
                             if (err) {
                                 return res.send(err);
                             }
                             console.log();
                             if (result === null || result === void 0 ? void 0 : result['affectedRows']) {
+                                // res.json({
+                                //     msg:'Order已经成功创建',
+                                //     success:true
+                                // })
+                                ordersSuccess.push(order_id);
+                            }
+                            console.log('ordersSuccess', ordersSuccess);
+                            if (ordersSuccess.length === numberOfShipments) {
                                 res.json({
-                                    msg: 'Order已经成功创建',
+                                    msg: 'order已经成功创建',
                                     success: true
                                 });
                             }
