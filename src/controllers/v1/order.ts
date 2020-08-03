@@ -34,6 +34,7 @@ const orderService = async (req: Request, res: Response) => {
         payment_method: 'CHARGE_TO_ACCOUNT',
         shipments: shipmentsToSendForOrder
     }
+    console.log('order info',orderInfo);
     try {
         let response: AxiosResponse = await HttpRequest.put('https://digitalapi.auspost.com.au/test/shipping/v1/orders', {...orderInfo});
         if (response.data?.order) {
@@ -45,15 +46,25 @@ const orderService = async (req: Request, res: Response) => {
                     return res.send(err);
                 }
                 if(result?.['affectedRows']===1){
+                    let ordersSuccess:string[] = [];
+                    const numberOfShipments:number = response.data.order.shipments.length;
                    for await (let shipment of response.data.order.shipments){
-                       pool.query(`update shipments set order_id = "${order_id}" where shipment_id = "${shipment.shipment_id}"`,(err,result)=>{
+                       pool.query(`update shipments set order_id = "${order_id}" where shipment_id = "${shipment.shipment_id}"`,async (err,result)=>{
                            if(err){
                                return res.send(err);
                            }
                            console.log()
                            if(result?.['affectedRows']){
+                               // res.json({
+                               //     msg:'Order已经成功创建',
+                               //     success:true
+                               // })
+                               ordersSuccess.push(order_id);
+                           }
+                           console.log('ordersSuccess',ordersSuccess);
+                           if(ordersSuccess.length===numberOfShipments){
                                res.json({
-                                   msg:'Order已经成功创建',
+                                   msg:'order已经成功创建',
                                    success:true
                                })
                            }

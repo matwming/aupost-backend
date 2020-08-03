@@ -9,7 +9,7 @@ const getShipment = (req: Request, res: Response) => {
     console.log('getting shipments...')
     console.log('email', req.body)
     const {email} = req.body.user;
-    pool.query(`select * from shipments where sender_email="${email}" and isDeleted = 1`, (err, results, fields) => {
+    pool.query(`select * from shipments where sender_email="${email}" and is_deleted = 1 and order_id is null`, (err, results, fields) => {
         if (err) {
             console.log('searching sender_email shipments has errors', err.message);
             return;
@@ -105,8 +105,8 @@ export const createAuShipment = async (req: Request, res: Response) => {
     const shipmentCreatedResponse = response.data.shipments;
     for await (const shipmentRes of shipmentCreatedResponse) {
         pool.query(
-            `insert into shipments (charge_code,deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city,create_date) 
-         values("${charge_code}","${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_id}","${contents}","${value}","${shipmentRes.shipment_id}","${email}","${city}","${shipmentRes.shipment_creation_date}");`,
+            `insert into shipments (charge_code,deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city,create_date,is_deleted) 
+         values("${charge_code}","${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_id}","${contents}","${value}","${shipmentRes.shipment_id}","${email}","${city}","${shipmentRes.shipment_creation_date}",1);`,
             async (err, result, fields) => {
                 try {
                     if (err) {
