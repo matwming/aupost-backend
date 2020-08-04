@@ -9,7 +9,7 @@ const getShipment = (req: Request, res: Response) => {
     console.log('getting shipments...')
     console.log('email', req.body)
     const {email} = req.body.user;
-    pool.query(`select * from shipments where sender_email="${email}" and is_deleted = 1 and order_id is null`, (err, results, fields) => {
+    pool.query(`select * from shipments where sender_email="${email}" and is_deleted = 0 and order_id is null`, (err, results, fields) => {
         if (err) {
             console.log('searching sender_email shipments has errors', err.message);
             return;

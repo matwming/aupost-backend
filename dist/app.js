@@ -11,9 +11,9 @@ const mysql_1 = __importDefault(require("mysql"));
 const rookout = require('rookout');
 // @ts-ignore
 const cors_1 = __importDefault(require("cors"));
-rookout.start({
-    token: '6922556455a7eaad3bf66522a762ca474a5423d8eceebb85d86888962d8670d2'
-});
+// rookout.start({
+//     token: '6922556455a7eaad3bf66522a762ca474a5423d8eceebb85d86888962d8670d2'
+// })
 const app = express_1.default();
 const port = 8180;
 // export const pool=mysql.createPool({
@@ -24,11 +24,13 @@ const port = 8180;
 //     database:'aupost_project'
 // });
 exports.pool = mysql_1.default.createPool({
+    connectionLimit: 100,
     host: '127.0.0.1',
     port: 3306,
     user: 'root',
     password: 'Zhaoying@8604',
-    database: 'aupost_project'
+    database: 'aupost_project',
+    debug: false
 });
 exports.pool.getConnection((err, connection) => {
     if (err) {
