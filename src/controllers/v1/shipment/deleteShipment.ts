@@ -11,7 +11,7 @@ const deleteShipment = (req: Request, res: Response) => {
         HttpRequest.delete(`https://digitalapi.auspost.com.au/test/shipping/v1/shipments/${shipmentId}`).then((response: AxiosResponse) => {
             console.log('delete shipment', response.status);
             if(response.status==200){
-                pool.query('update shipments set isDeleted = 1 where shipment_id ="${shipmentId}"',(err,result)=>{
+                pool.query('update shipments set is_deleted = 0 where shipment_id ="${shipmentId}"',(err,result)=>{
                     if(err){
                         console.log(err);
                         return;

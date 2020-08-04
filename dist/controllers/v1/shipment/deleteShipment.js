@@ -10,7 +10,7 @@ const deleteShipment = (req, res) => {
         config_1.HttpRequest.delete(`https://digitalapi.auspost.com.au/test/shipping/v1/shipments/${shipmentId}`).then((response) => {
             console.log('delete shipment', response.status);
             if (response.status == 200) {
-                app_1.pool.query('update shipments set isDeleted = 1 where shipment_id ="${shipmentId}"', (err, result) => {
+                app_1.pool.query('update shipments set is_deleted = 0 where shipment_id ="${shipmentId}"', (err, result) => {
                     if (err) {
                         console.log(err);
                         return;

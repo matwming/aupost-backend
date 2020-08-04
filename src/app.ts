@@ -6,25 +6,29 @@ const rookout = require('rookout');
 // @ts-ignore
 import cors from 'cors';
 
-rookout.start({
-    token: '6922556455a7eaad3bf66522a762ca474a5423d8eceebb85d86888962d8670d2'
-})
+// rookout.start({
+//     token: '6922556455a7eaad3bf66522a762ca474a5423d8eceebb85d86888962d8670d2'
+// })
 const app = express();
 const port =8180;
 
 export const pool=mysql.createPool({
+    connectionLimit:100,
     host:'13.75.232.156',
     port:3306,
     user:'root',
     password:'Zhaoying@8604',
-    database:'aupost_project'
+    database:'aupost_project',
+    debug:false
 });
 // export const pool = mysql.createPool({
+//     connectionLimit:100,
 //     host:'127.0.0.1',
 //     port:3306,
 //     user:'root',
 //     password:'Zhaoying@8604',
-//     database:'aupost_project'
+//     database:'aupost_project',
+//     debug:false
 // });
 pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
     if(err){
@@ -53,4 +57,4 @@ app.use((err: Error, req: Request, res: Response, next: NextFunction) => {
     res.json({error: err.message,msg:'unhandled routes'});
 });
 
-app.listen(process.env.PORT || port, () => console.log(`Example app listening on port ${port}!`));
+app.listen(port, () => console.log(`Example app listening on port ${port}!`));
