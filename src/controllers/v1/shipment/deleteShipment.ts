@@ -11,13 +11,14 @@ const deleteShipment = (req: Request, res: Response) => {
         HttpRequest.delete(`https://digitalapi.auspost.com.au/test/shipping/v1/shipments/${shipmentId}`).then((response: AxiosResponse) => {
             console.log('delete shipment', response.status);
             if(response.status==200){
-                pool.query('update shipments set is_deleted = 0 where shipment_id ="${shipmentId}"',(err,result)=>{
+                const deleteShipment =`delete from shipments where shipment_id ="${shipmentId}"`;
+                pool.query(deleteShipment,(err,result)=>{
                     if(err){
                         console.log(err);
                         return;
                     }
-                    console.log('result',result);
-                    if(result?.['affectedRows']==0){
+                    console.log('delete-shipments',result);
+                    if(result?.['affectedRows']==1){
                         return res.json({msg:`shipment id ${shipmentId} is successfully deleted`,success:true});
                     }
                 })
