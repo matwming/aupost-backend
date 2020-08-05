@@ -28,6 +28,7 @@ export const pool = mysql.createPool({
     database:'aupost_project',
     debug:false
 });
+
 pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
     if(err){
         console.error('error connecting: ', err.stack);
@@ -35,6 +36,11 @@ pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
     }
     console.log('successfully connected to aupost_project');
     connection.release();
+    //connection.destroy();
+});
+
+pool.on('connection',(connection: PoolConnection)=>{
+    console.log('successfully triggered poll connection event');
 });
 
 app.use(cors());

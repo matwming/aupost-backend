@@ -39,6 +39,10 @@ exports.pool.getConnection((err, connection) => {
     }
     console.log('successfully connected to aupost_project');
     connection.release();
+    //connection.destroy();
+});
+exports.pool.on('connection', (connection) => {
+    console.log('successfully triggered poll connection event');
 });
 app.use(cors_1.default());
 /*
