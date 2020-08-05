@@ -18,7 +18,7 @@ const app = express_1.default();
 const port = 8180;
 exports.pool = mysql_1.default.createPool({
     connectionLimit: 100,
-    host: '13.75.232.156',
+    host: '127.0.0.1',
     port: 3306,
     user: 'root',
     password: 'Zhaoying@8604',
@@ -41,6 +41,10 @@ exports.pool.getConnection((err, connection) => {
     }
     console.log('successfully connected to aupost_project');
     connection.release();
+    //connection.destroy();
+});
+exports.pool.on('connection', (connection) => {
+    console.log('successfully triggered poll connection event');
 });
 app.use(cors_1.default());
 /*

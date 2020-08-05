@@ -14,13 +14,14 @@ const port =8180;
 
 export const pool=mysql.createPool({
     connectionLimit:100,
-    host:'13.75.232.156',
+    host:'127.0.0.1',
     port:3306,
     user:'root',
     password:'Zhaoying@8604',
     database:'aupost_project',
     debug:false
 });
+
 // export const pool = mysql.createPool({
 //     connectionLimit:100,
 //     host:'127.0.0.1',
@@ -30,6 +31,7 @@ export const pool=mysql.createPool({
 //     database:'aupost_project',
 //     debug:false
 // });
+
 pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
     if(err){
         console.error('error connecting: ', err.stack);
@@ -37,6 +39,11 @@ pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
     }
     console.log('successfully connected to aupost_project');
     connection.release();
+    //connection.destroy();
+});
+
+pool.on('connection',(connection: PoolConnection)=>{
+    console.log('successfully triggered poll connection event');
 });
 
 app.use(cors());
