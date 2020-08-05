@@ -16,16 +16,8 @@ const cors_1 = __importDefault(require("cors"));
 // })
 const app = express_1.default();
 const port = 8180;
-exports.pool = mysql_1.default.createPool({
-    connectionLimit: 100,
-    host: '127.0.0.1',
-    port: 3306,
-    user: 'root',
-    password: 'Zhaoying@8604',
-    database: 'aupost_project',
-    debug: false
-});
-// export const pool = mysql.createPool({
+//localhost
+// export const pool=mysql.createPool({
 //     connectionLimit:100,
 //     host:'127.0.0.1',
 //     port:3306,
@@ -34,6 +26,16 @@ exports.pool = mysql_1.default.createPool({
 //     database:'aupost_project',
 //     debug:false
 // });
+//production
+exports.pool = mysql_1.default.createPool({
+    connectionLimit: 100,
+    host: '13.75.232.156',
+    port: 3306,
+    user: 'root',
+    password: 'Zhaoying@8604',
+    database: 'aupost_project',
+    debug: false
+});
 exports.pool.getConnection((err, connection) => {
     if (err) {
         console.error('error connecting: ', err.stack);

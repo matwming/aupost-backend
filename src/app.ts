@@ -12,17 +12,9 @@ import cors from 'cors';
 const app = express();
 const port =8180;
 
-export const pool=mysql.createPool({
-    connectionLimit:100,
-    host:'127.0.0.1',
-    port:3306,
-    user:'root',
-    password:'Zhaoying@8604',
-    database:'aupost_project',
-    debug:false
-});
+//localhost
 
-// export const pool = mysql.createPool({
+// export const pool=mysql.createPool({
 //     connectionLimit:100,
 //     host:'127.0.0.1',
 //     port:3306,
@@ -31,6 +23,17 @@ export const pool=mysql.createPool({
 //     database:'aupost_project',
 //     debug:false
 // });
+
+//production
+export const pool = mysql.createPool({
+    connectionLimit:100,
+    host:'13.75.232.156',
+    port:3306,
+    user:'root',
+    password:'Zhaoying@8604',
+    database:'aupost_project',
+    debug:false
+});
 
 pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
     if(err){
