@@ -41,8 +41,8 @@ pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
         return;
     }
     console.log('successfully connected to aupost_project');
-    connection.release();
-    //connection.destroy();
+    //connection.release();
+    connection.destroy();
 });
 
 pool.on('connection',(connection: PoolConnection)=>{
