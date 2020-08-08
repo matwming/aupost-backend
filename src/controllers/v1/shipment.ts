@@ -28,7 +28,7 @@ export const createAuShipment = async (req: Request, res: Response) => {
         return res.status(400).json({errors: errors.array()});
     }
     const {
-        charge_code,
+        product_id,
         deliver_to,
         country,
         province,
@@ -39,7 +39,6 @@ export const createAuShipment = async (req: Request, res: Response) => {
         contents,
         value,
         district,
-        product_id
     } = req.body;
     console.log('create-aushipment', req.body);
     const {email} = req.body.user;
@@ -105,8 +104,8 @@ export const createAuShipment = async (req: Request, res: Response) => {
     const shipmentCreatedResponse = response.data.shipments;
     for await (const shipmentRes of shipmentCreatedResponse) {
         pool.query(
-            `insert into shipments (charge_code,deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city,create_date,is_deleted) 
-         values("${charge_code}","${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_id}","${contents}","${value}","${shipmentRes.shipment_id}","${email}","${city}","${shipmentRes.shipment_creation_date}",0);`,
+            `insert into shipments (deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city,create_date,is_deleted) 
+         values("${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_id}","${contents}","${value}","${shipmentRes.shipment_id}","${email}","${city}","${shipmentRes.shipment_creation_date}",0);`,
             async (err, result, fields) => {
                 try {
                     if (err) {
