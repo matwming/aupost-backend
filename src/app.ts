@@ -32,7 +32,8 @@ export const pool = mysql.createPool({
     user:'root',
     password:'Zhaoying@8604',
     database:'aupost_project',
-    debug:false
+    debug:false,
+    multipleStatements:true
 });
 
 pool.getConnection((err:MysqlError,connection:PoolConnection)=>{

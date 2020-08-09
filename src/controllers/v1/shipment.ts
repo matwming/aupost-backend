@@ -9,7 +9,9 @@ const getShipment = (req: Request, res: Response) => {
     console.log('getting shipments...')
     console.log('email', req.body)
     const {email} = req.body.user;
-    pool.query(`select * from shipments where sender_email="${email}" and is_deleted = 0 and order_id is null`, (err, results, fields) => {
+    const getShipmentQuery = `select shipments.deliver_to, shipments.country, shipments.province, shipments.address, shipments.phone, shipments.consignment_weight, shipments.product_id, shipments.contents, value, shipments.shipment_id, shipments.sender_email, shipments.city, shipments.create_date, shipments.label_url, shipments.order_id, shipments.district, i.tracking_details_consignment_id,i.item_id from shipments left join items i on shipments.shipment_id = i.shipment_id where sender_email="matwming114@gmail.com" and is_deleted = 0 and order_id is null order by shipments.create_date desc`;
+
+    pool.query(getShipmentQuery, (err, results, fields) => {
         if (err) {
             console.log('searching sender_email shipments has errors', err.message);
             return;
