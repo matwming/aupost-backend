@@ -15,6 +15,7 @@ import getOrder from "../controllers/v1/order/getOrder";
 import getOrderSummary from "../controllers/aupost/v1/ShippingAndTracking/getOrderSummary";
 // @ts-ignore
 import deleteShipment from "../controllers/v1/shipment/deleteShipment";
+import updateShipment from "../controllers/v1/shipment/updateShipment";
 
 const router = Router();
 const currentAPIversion = "v1";
@@ -79,6 +80,8 @@ router.post(`/api/v1/save-address`, handleAuth, saveAddress);
 router.get('/api/v1/get-shipment', handleAuth, getShipment);
 
 router.post('/api/v1/create-aushipment', handleAuth, createAuShipment);
+
+router.put('/api/v1/update-shipment/:shipmentId',handleAuth,updateShipment);
 
 router.post('/api/v1/create-label', handleAuth, labelService);
 
