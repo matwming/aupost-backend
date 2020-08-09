@@ -28,7 +28,7 @@ exports.saveAddress = async (req, res) => {
     const { charge_code, deliver_to, country, province, address, phone, city, consignment_weight, product_classification, contents, value, } = req.body;
     console.log('body', req.body);
     const { email } = req.body.user;
-    app_1.pool.query(`insert into shipments (charge_code,deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city) 
+    app_1.pool.query(`insert into shipments (charge_code,deliver_to,country,province,address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city) 
          values("${charge_code}","${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_classification}","${contents}","${value}","","${email}","${city}")`, async (err, result, fields) => {
         if (err) {
             console.log("insert into shippments has errors", err);

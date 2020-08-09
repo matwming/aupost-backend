@@ -48,7 +48,7 @@ export const saveAddress = async (req: Request, res: Response) => {
   console.log('body',req.body);
     const { email } = req.body.user;
   pool.query(
-      `insert into shipments (charge_code,deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city) 
+      `insert into shipments (charge_code,deliver_to,country,province,address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city) 
          values("${charge_code}","${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_classification}","${contents}","${value}","","${email}","${city}")`,
       async (err, result, fields) => {
         if (err) {

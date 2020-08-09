@@ -59,13 +59,13 @@ export const createAuShipment = async (req: Request, res: Response) => {
 
                 },
                 "to": {
-                    "name": `${deliver_to}`,
+                    "name": `n${deliver_to}`,
                     "business_name": "",
                     "lines": [
-                        `${address}`
+                        `n${address}`
                     ],
-                    "suburb": `${district}`,
-                    "state": `${province}`,
+                    "suburb": `n${district}`,
+                    "state": `n${province}`,
                     "country": "CN",
                     "postcode": `1000`,
                     "phone": `${phone}`,
@@ -79,7 +79,7 @@ export const createAuShipment = async (req: Request, res: Response) => {
                         "width": "",
                         "weight": `${consignment_weight}`,
                         "item_reference": "blocked",
-                        "product_id": "ECM8",
+                        "product_id": `${product_id}`,
                         "commercial_value": false,
                         "classification_type": "GIFT",
                         "description_of_other": `${contents}`,
@@ -104,8 +104,8 @@ export const createAuShipment = async (req: Request, res: Response) => {
     const shipmentCreatedResponse = response.data.shipments;
     for await (const shipmentRes of shipmentCreatedResponse) {
         pool.query(
-            `insert into shipments (deliver_to,country,province,detail_address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city,create_date,is_deleted) 
-         values("${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_id}","${contents}","${value}","${shipmentRes.shipment_id}","${email}","${city}","${shipmentRes.shipment_creation_date}",0);`,
+            `insert into shipments (deliver_to,country,province,address,phone,consignment_weight,product_id,contents,value,shipment_id,sender_email,city,create_date,is_deleted,district) 
+         values("${deliver_to}","${country}","${province}","${address}","${phone}","${consignment_weight}","${product_id}","${contents}","${value}","${shipmentRes.shipment_id}","${email}","${city}","${shipmentRes.shipment_creation_date}",0,"${district}");`,
             async (err, result, fields) => {
                 try {
                     if (err) {
@@ -133,6 +133,11 @@ export const createAuShipment = async (req: Request, res: Response) => {
                     }
                 } catch (e) {
                     console.log('create shipment error', e);
+                   // return res.json({
+                   //      msg:'shipment failed to create',
+                   //      success:false,
+                   //      err:e.message
+                   //  })
                 }
             }
         );
