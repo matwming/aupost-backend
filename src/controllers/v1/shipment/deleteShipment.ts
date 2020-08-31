@@ -5,10 +5,15 @@ import {pool} from "../../../app";
 
 const deleteShipment = (req: Request, res: Response) => {
     const {shipmentId} = req.params;
+    const accountNumber = req.headers['account-number'];
     console.log('shipment id',shipmentId)
     if (shipmentId !== undefined) {
         console.log('delete shipment started')
-        HttpRequest.delete(`https://digitalapi.auspost.com.au/test/shipping/v1/shipments/${shipmentId}`).then((response: AxiosResponse) => {
+        HttpRequest.delete(`https://digitalapi.auspost.com.au/test/shipping/v1/shipments/${shipmentId}`,{
+            headers:{
+                ['Account-Number']:accountNumber
+            }
+        }).then((response: AxiosResponse) => {
             console.log('delete shipment', response.status);
             if(response.status==200){
                 const deleteShipment =`delete from shipments where shipment_id ="${shipmentId}"`;

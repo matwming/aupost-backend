@@ -24,6 +24,8 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
   }
 
   const { email, password } = req.body;
+    // @ts-ignore
+    console.log('req.header.account-number',req.headers['account-number']);
   try {
     // see if user exists
     pool.query(
@@ -33,8 +35,7 @@ export const login: RequestHandler = async (req: Request, res: Response) => {
           console.log("auth.login has error", err.message);
           return;
         }
-        console.log("result", result);
-
+        //console.log("result", result);
         if (result.length === 0) {
           return res
             .status(400)

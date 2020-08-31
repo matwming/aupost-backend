@@ -7,16 +7,16 @@ import {AxiosResponse} from "axios";
 
 const getShipment = (req: Request, res: Response) => {
     console.log('getting shipments...')
-    console.log('email', req.body)
+    //console.log('email', req.body)
     const {email} = req.body.user;
-    const getShipmentQuery = `select shipments.deliver_to, shipments.country, shipments.province, shipments.address, shipments.phone, shipments.consignment_weight, shipments.product_id, shipments.contents, value, shipments.shipment_id, shipments.sender_email, shipments.city, shipments.create_date, shipments.label_url, shipments.order_id, shipments.district, i.tracking_details_consignment_id,i.item_id from shipments left join items i on shipments.shipment_id = i.shipment_id where sender_email="matwming114@gmail.com" and is_deleted = 0 and order_id is null order by shipments.create_date desc`;
+    const getShipmentQuery = `select shipments.deliver_to, shipments.country, shipments.province, shipments.address, shipments.phone, shipments.consignment_weight, shipments.product_id, shipments.contents, value, shipments.shipment_id, shipments.sender_email, shipments.city, shipments.create_date, shipments.label_url, shipments.order_id, shipments.district, i.tracking_details_consignment_id,i.item_id from shipments left join items i on shipments.shipment_id = i.shipment_id where sender_email="${email}" and is_deleted = 0 and order_id is null order by shipments.create_date desc`;
 
     pool.query(getShipmentQuery, (err, results, fields) => {
         if (err) {
             console.log('searching sender_email shipments has errors', err.message);
             return;
         }
-        console.log('results', results);
+        //console.log('results', results);
         if (results.length === 0) {
             return res.json({msg: `No shipment is found for user ${email}`, success: true, results: []});
         }
@@ -41,6 +41,7 @@ export const createAuShipment = async (req: Request, res: Response) => {
         contents,
         value,
         district,
+        post_account_number
     } = req.body;
     console.log('create-aushipment', req.body);
     const {email} = req.body.user;
@@ -100,9 +101,13 @@ export const createAuShipment = async (req: Request, res: Response) => {
     }
     let response:AxiosResponse = await HttpRequest.post(
         "https://digitalapi.auspost.com.au/test/shipping/v1/shipments",
-        {...shipmentData}
+        {...shipmentData},{
+            headers: {
+                "Account-Number":post_account_number
+            }
+        }
     )
-    console.log("createShipment", response.data);
+    //console.log("createShipment", response.data);
     const shipmentCreatedResponse = response.data.shipments;
     for await (const shipmentRes of shipmentCreatedResponse) {
         pool.query(
@@ -114,7 +119,7 @@ export const createAuShipment = async (req: Request, res: Response) => {
                         console.log("insert into shippments has errors", err);
                         return;
                     }
-                    console.log(result);
+                    //console.log(result);
                     if (result.hasOwnProperty("affectedRows")) {
                         for await (const singleItem of shipmentRes.items) {
                             const {item_id, weight, item_reference, tracking_details, product_id, item_summary} = singleItem;

@@ -1,5 +1,5 @@
 import {Request,Response} from 'express';
-import {validationResult} from "express-validator";
+import {header, validationResult} from "express-validator";
 import {AxiosResponse} from "axios";
 import {HttpRequest} from "../../../config/config";
 import {pool} from "../../../app";
@@ -26,6 +26,7 @@ const updateShipment=async (req:Request,res:Response)=>{
     } = req.body;
     console.log('create-aushipment', req.body);
     const {email} = req.body.user;
+    const accountNumber=req.headers['account-number'];
     const shipmentData = {
         "shipments": [
             {
@@ -84,7 +85,11 @@ const updateShipment=async (req:Request,res:Response)=>{
     try {
         let response:AxiosResponse = await HttpRequest.put(
             `https://digitalapi.auspost.com.au/test/shipping/v1/shipments/${shipmentId}`,
-            {...shipmentData.shipments[0]}
+            {...shipmentData.shipments[0]},{
+                headers:{
+                    "Account-Number":accountNumber
+                }
+            }
         )
         console.log('response',response.data);
         const result = response.data;

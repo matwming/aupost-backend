@@ -25,6 +25,7 @@ const orderService = async (req: Request, res: Response) => {
     }
     const shipmentIds: string[] = req.body.selectedShipments.map((el:any)=>el.shipment_id);
     console.log('orderService',req.body)
+    const accountNumber = req.headers['account-number'];
     const shipmentsToSendForOrder: IShipment[] = [];
     shipmentIds.forEach((shipment) => {
         shipmentsToSendForOrder.push({shipment_id: shipment})
@@ -36,7 +37,11 @@ const orderService = async (req: Request, res: Response) => {
     }
     console.log('order info',orderInfo);
     try {
-        let response: AxiosResponse = await HttpRequest.put('https://digitalapi.auspost.com.au/test/shipping/v1/orders', {...orderInfo});
+        let response: AxiosResponse = await HttpRequest.put('https://digitalapi.auspost.com.au/test/shipping/v1/orders', {...orderInfo},{
+            headers:{
+                "Account-Number":accountNumber
+            }
+        });
         if (response.data?.order) {
             const {order_id, order_reference, order_creation_date, order_summary} = response.data.order;
             console.log('order_response_data',response.data)

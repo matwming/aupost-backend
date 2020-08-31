@@ -16,6 +16,7 @@ import getOrderSummary from "../controllers/aupost/v1/ShippingAndTracking/getOrd
 // @ts-ignore
 import deleteShipment from "../controllers/v1/shipment/deleteShipment";
 import updateShipment from "../controllers/v1/shipment/updateShipment";
+import getPostsAccount from "../controllers/v1/getPostsAccount";
 
 const router = Router();
 const currentAPIversion = "v1";
@@ -99,4 +100,6 @@ router.get('/api/v1/get-orders', handleAuth, getOrder);
 router.get('/api/v1/get-order-summary/:orderId', handleAuth, getOrderSummary);
 
 router.delete('/api/v1/delete-shipment/:shipmentId', handleAuth, deleteShipment);
+
+router.get('/api/v1/get-post-accounts',handleAuth,getPostsAccount);
 export default router;

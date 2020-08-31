@@ -21,6 +21,7 @@ const labelService = async (req: Request, res: Response) => {
         return res.status(400).json({errors: errors.array()});
     }
     const {shipment_id} = req.body;
+    const accountNumber:string = <string>req.headers['account-number'];
     if (shipment_id == undefined) {
         res.json({
             error: 'shipment_id is undefined',
@@ -32,7 +33,7 @@ const labelService = async (req: Request, res: Response) => {
     console.log('findItems', findItems);
     pool.query(findItems,  (err, result: IIterms[]) => {
         const itemId = result[0].item_id;
-         createLabel(shipment_id, itemId)
+         createLabel(shipment_id, itemId,accountNumber)
             .then((response) => {
                 console.log('labelService', response);
                 if(response[0].hasOwnProperty('url')){

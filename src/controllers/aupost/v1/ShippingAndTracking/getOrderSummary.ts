@@ -6,6 +6,7 @@ import path from 'path';
 
 const getOrderSummary = async (req: Request, res: Response) => {
     const {orderId} = req.params;
+    const accountNumber = req.headers['account-number'];
     if (orderId === undefined) {
         return res.json({msg: 'Please provide a valid order id', success: false});
     }
@@ -14,7 +15,10 @@ const getOrderSummary = async (req: Request, res: Response) => {
     let file=fs.createWriteStream(tempFilePath);
     let stream:AxiosResponse =  await HttpRequest({
         url:`https://digitalapi.auspost.com.au/test/shipping/v1/orders/${orderId}/summary`,
-        responseType:'stream'
+        responseType:'stream',
+        headers:{
+            "Account-Number":accountNumber
+        }
     });
     stream.data.pipe(file).on('finish',()=>{
         console.log('thie file is finished downloading...')
