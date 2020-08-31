@@ -13,4 +13,3 @@ export const HttpRequest = axios.create({
     timeout: 10000,
     headers: {...HttpRequestHeader}
 });
-

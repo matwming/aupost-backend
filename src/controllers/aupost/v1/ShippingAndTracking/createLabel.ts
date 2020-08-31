@@ -4,7 +4,7 @@ import {AxiosResponse} from "axios";
 import {pool} from "../../../../app";
 
 
-const createLabel = async (shipmentId: string, itemId: string) => {
+const createLabel = async (shipmentId: string, itemId: string,accountNumber?:string) => {
     const body = {
         wait_for_label_url: true,
         preferences: [
@@ -35,7 +35,11 @@ const createLabel = async (shipmentId: string, itemId: string) => {
     };
     let res = await HttpRequest.post(
         "https://digitalapi.auspost.com.au/test/shipping/v1/labels",
-        {...body}
+        {...body},{
+            headers:{
+                ['Account-Number']:accountNumber
+            }
+        }
     );
     console.log("createLabel", res.data.labels);
     return res.data.labels;

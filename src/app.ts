@@ -2,7 +2,6 @@ import express, {Request, Response, NextFunction} from 'express';
 import router from './routes/routes';
 import bodyParser from "body-parser";
 import mysql, {MysqlError, PoolConnection} from "mysql";
-const rookout = require('rookout');
 // @ts-ignore
 import cors from 'cors';
 
