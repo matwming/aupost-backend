@@ -24,12 +24,24 @@ const port =8180;
 // });
 
 //production
+// export const pool = mysql.createPool({
+//     connectionLimit:100,
+//     host:'13.75.232.156',
+//     port:3306,
+//     user:'root',
+//     password:'Zhaoying@8604',
+//     database:'aupost_project',
+//     debug:false,
+//     multipleStatements:true
+// });
+
+//aws
 export const pool = mysql.createPool({
     connectionLimit:100,
-    host:'13.75.232.156',
+    host:'aupost.cv8raqlzj5t5.ap-southeast-2.rds.amazonaws.com',
     port:3306,
     user:'root',
-    password:'Zhaoying@8604',
+    password:'qaz123456',
     database:'aupost_project',
     debug:false,
     multipleStatements:true
