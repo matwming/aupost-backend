@@ -2,8 +2,9 @@ import {Response, Request} from "express";
 import {pool} from "../../app";
 import createShipment from "../aupost/v1/ShippingAndTracking/createShipment";
 import {validationResult} from "express-validator";
-import {HttpRequest} from "../../config/config";
+import {accountNumberToAuthProd, HttpRequest} from "../../config/config";
 import {AxiosResponse} from "axios";
+import axios from 'axios';
 
 const getShipment = (req: Request, res: Response) => {
     console.log('getting shipments...')
@@ -101,11 +102,16 @@ export const createAuShipment = async (req: Request, res: Response) => {
         ]
     }
     try {
-        let response:AxiosResponse = await HttpRequest.post(
-            "https://digitalapi.auspost.com.au/test/shipping/v1/shipments",
+        // @ts-ignore
+        const authorization= accountNumberToAuthProd[post_account_number];
+        let response:AxiosResponse = await axios.post(
+            "https://digitalapi.auspost.com.au/shipping/v1/shipments",
             {...shipmentData},{
                 headers: {
-                    "Account-Number":post_account_number
+                    "Account-Number":post_account_number,
+                    "Authorization":`Basic ${authorization}`,
+                    "Content-type":"application/json",
+                    "Accept":"application/json"
                 }
             }
         )
