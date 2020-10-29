@@ -1,7 +1,7 @@
 import {Request,Response} from 'express';
 import {header, validationResult} from "express-validator";
-import {AxiosResponse} from "axios";
-import {HttpRequest} from "../../../config/config";
+import axios,{AxiosResponse} from "axios";
+import {API_Endpoint,accountNumberToAuthProd} from "../../../config/config";
 import {pool} from "../../../app";
 
 const updateShipment=async (req:Request,res:Response)=>{
@@ -83,18 +83,23 @@ const updateShipment=async (req:Request,res:Response)=>{
         ]
     }
     try {
-        let response:AxiosResponse = await HttpRequest.put(
-            `https://digitalapi.auspost.com.au/test/shipping/v1/shipments/${shipmentId}`,
+        // @ts-ignore
+        const authorization=accountNumberToAuthProd[accountNumber];
+        let response:AxiosResponse = await axios.put(
+            `${API_Endpoint}/shipping/v1/shipments/${shipmentId}`,
             {...shipmentData.shipments[0]},{
                 headers:{
-                    "Account-Number":accountNumber
+                    "Account-Number":accountNumber,
+                    "Authorization":`Basic ${authorization}`,
+                    "Content-type":"application/json",
+                    "Accept":"application/json"
                 }
             }
         )
         console.log('response',response.data);
         const result = response.data;
-        const updateShipmentQuery=`update shipments set deliver_to = '${deliver_to}' , country = '${country}',province='${province}',address='${address}',phone='${phone}',consignment_weight='${consignment_weight}',product_id='${product_id}',contents='${contents}',value='${value}',city='${city}',modified_date='${result.shipment_modified_date}',district='${district}'  where shipment_id = "${result.shipment_id}"`;
-        const updateItemsQuery=`update items set weight='${consignment_weight}',product_id='${product_id}',total_cost='${result.shipment_summary.total_cost}' where shipment_id='${shipmentId}'`;
+        const updateShipmentQuery=`update shipments set deliver_to = '${deliver_to}' , country = '${country}',province='${province}',address='${address}',phone='${phone}',consignment_weight='${consignment_weight}',product_id='${product_id}',contents='${contents}',value='${value}',city='${city}',modified_date='${result.shipment_modified_date}',district='${district}', label_url=''  where shipment_id = "${result.shipment_id}"`;
+        const updateItemsQuery=`update items set weight='${consignment_weight}',product_id='${product_id}',total_cost='${result.shipment_summary.total_cost}',tracking_details_consignment_id='' where shipment_id='${shipmentId}'`;
         console.log('updateShipmentQuery',updateShipmentQuery);
         console.log('updateItemsQuery',updateItemsQuery);
         pool.query(`${updateShipmentQuery};${updateItemsQuery}`,(err,results)=>{

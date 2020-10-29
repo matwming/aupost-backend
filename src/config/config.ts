@@ -1,10 +1,20 @@
 import axios from 'axios';
 
-let API_Endpoint = "https://digitalapi.auspost.com.au/test/shipping/​";
+export let API_Endpoint = "";
+let API_Endpoint_Test ="https://digitalapi.auspost.com.au/test";
+let API_Endpoint_Prod="https://digitalapi.auspost.com.au";
+const isTest:boolean = true;
+if(isTest){
+    API_Endpoint=API_Endpoint_Test
+} else {
+    API_Endpoint=API_Endpoint_Prod;
+}
+
 const accountNumberToAuthTest={
-    "1003471288":"NWJjZTQ3MjYtODIxYi00NWFjLWExNGMtYjkyMjdkMTI5MzFiOnhiZGU0N2VlZGVjNzUwODUwYTVl",
+    "1003471228":"NWJjZTQ3MjYtODIxYi00NWFjLWExNGMtYjkyMjdkMTI5MzFiOnhiZGU0N2VlZGVjNzUwODUwYTVl",
 }
 export const accountNumberToAuthProd={
+    "1003471228":"NWJjZTQ3MjYtODIxYi00NWFjLWExNGMtYjkyMjdkMTI5MzFiOnhiZGU0N2VlZGVjNzUwODUwYTVl",
     "0006983030":"MDFmZWYwYjItNTBkOS00OThkLWE5M2UtNWE3Mzc4OTNkOTBkOnhmZjAyNjVlZWZhZDdlNWMzZmIy",
     "0006812659":"NjE3OTcyY2YtMzY0Yi00YmM3LTlkNDgtNjQ3ZGYyOWMxNTY1OnhhZmUyNmJmMGYwYjIzZWZjOWVl",
     "0009658282":"ZWJiM2VlYTgtMGQ4NC00M2IxLWI0YWMtOWQxNWRjYmM2ZDU4Ong4YWYzMmRkOWUwNzA5Y2I5NDBh",

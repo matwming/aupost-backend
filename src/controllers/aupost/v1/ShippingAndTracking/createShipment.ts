@@ -3,7 +3,7 @@ import {HttpRequest} from "../../../../config/config";
 import {AxiosResponse} from "axios";
 import {validationResult} from "express-validator";
 import {pool} from "../../../../app";
-
+import {API_Endpoint} from '../../../../config/config';
 const createShipment = async (req: any, response: Response) => {
 
     const {
@@ -76,8 +76,9 @@ const createShipment = async (req: any, response: Response) => {
             }
         ]
     }
+    console.log('api-endpoint',API_Endpoint);
     let res = await HttpRequest.post(
-        "https://digitalapi.auspost.com.au/test/shipping/v1/shipments",
+        `${API_Endpoint}/shipping/v1/shipments`,
         {...shipmentData}
     )
     console.log("createShipment", res.data);

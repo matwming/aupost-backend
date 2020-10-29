@@ -2,7 +2,8 @@ import {Response, Request} from "express";
 import {pool} from "../../app";
 import {validationResult} from "express-validator";
 import {HttpRequest} from "../../config/config";
-import {AxiosResponse} from "axios";
+import axios,{AxiosResponse} from "axios";
+import {API_Endpoint,accountNumberToAuthProd} from '../../config/config';
 
 interface IShipment {
     shipment_id: string
@@ -35,11 +36,16 @@ const orderService = async (req: Request, res: Response) => {
         payment_method: 'CHARGE_TO_ACCOUNT',
         shipments: shipmentsToSendForOrder
     }
+    // @ts-ignore
+    const authorization=accountNumberToAuthProd[accountNumber];
     console.log('order info',orderInfo);
     try {
-        let response: AxiosResponse = await HttpRequest.put('https://digitalapi.auspost.com.au/test/shipping/v1/orders', {...orderInfo},{
+        let response: AxiosResponse = await axios.put(`${API_Endpoint}/shipping/v1/orders`, {...orderInfo},{
             headers:{
-                "Account-Number":accountNumber
+                "Account-Number":accountNumber,
+                "Authorization":`Basic ${authorization}`,
+                "Content-type":"application/json",
+                "Accept":"application/json"
             }
         });
         if (response.data?.order) {

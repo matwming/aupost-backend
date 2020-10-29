@@ -1,6 +1,6 @@
 import {Response, Request} from "express";
-import {HttpRequest} from "../../../config/config";
-import {AxiosError, AxiosResponse} from "axios";
+import {accountNumberToAuthProd,API_Endpoint} from "../../../config/config";
+import axios,{AxiosError, AxiosResponse} from "axios";
 import {pool} from "../../../app";
 
 const deleteShipment = (req: Request, res: Response) => {
@@ -8,10 +8,15 @@ const deleteShipment = (req: Request, res: Response) => {
     const accountNumber = req.headers['account-number'];
     console.log('shipment id',shipmentId)
     if (shipmentId !== undefined) {
-        console.log('delete shipment started')
-        HttpRequest.delete(`https://digitalapi.auspost.com.au/test/shipping/v1/shipments/${shipmentId}`,{
+        console.log('delete shipment started');
+        // @ts-ignore
+        const authorization= accountNumberToAuthProd[accountNumber];
+        axios.delete(`${API_Endpoint}/shipping/v1/shipments/${shipmentId}`,{
             headers:{
-                ['Account-Number']:accountNumber
+                'Account-Number':accountNumber,
+                "Authorization":`Basic ${authorization}`,
+                "Content-type":"application/json",
+                "Accept":"application/json"
             }
         }).then((response: AxiosResponse) => {
             console.log('delete shipment', response.status);

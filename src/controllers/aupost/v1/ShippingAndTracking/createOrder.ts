@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 import { HttpRequest } from "../../../../config/config";
 import { AxiosResponse } from "axios";
-
+import {API_Endpoint} from '../../../../config/config';
 const createOrder = () => {
   const body = {
     order_reference: "My order reference",
@@ -14,7 +14,7 @@ const createOrder = () => {
   };
 
   return HttpRequest.put(
-    `https://digitalapi.auspost.com.au/test/shipping/v1/orders`
+    `${API_Endpoint}/shipping/v1/orders`
   )
     .then((res: AxiosResponse) => {
       console.log("createOrder", res.data);

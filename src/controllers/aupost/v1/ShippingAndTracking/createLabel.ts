@@ -1,8 +1,7 @@
 import {Request, Response} from "express";
-import {HttpRequest} from "../../../../config/config";
-import {AxiosResponse} from "axios";
+import {accountNumberToAuthProd,API_Endpoint} from "../../../../config/config";
+import axios,{AxiosResponse} from "axios";
 import {pool} from "../../../../app";
-
 
 const createLabel = async (shipmentId: string, itemId: string,accountNumber?:string) => {
     const body = {
@@ -33,11 +32,16 @@ const createLabel = async (shipmentId: string, itemId: string,accountNumber?:str
             },
         ],
     };
-    let res = await HttpRequest.post(
-        "https://digitalapi.auspost.com.au/test/shipping/v1/labels",
+    // @ts-ignore
+    const authorization=accountNumberToAuthProd[accountNumber];
+    let res = await axios.post(
+        `${API_Endpoint}/shipping/v1/labels`,
         {...body},{
             headers:{
-                ['Account-Number']:accountNumber
+                ['Account-Number']:accountNumber,
+                "Authorization":`Basic ${authorization}`,
+                "Content-type":"application/json",
+                "Accept":"application/json"
             }
         }
     );

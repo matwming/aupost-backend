@@ -1,6 +1,7 @@
 import { Request, Response } from "express";
 import { HttpRequest } from "../../../../config/config";
 import { AxiosResponse } from "axios";
+import {API_Endpoint} from '../../../../config/config';
 
 const getLabel = () => {
   const body = {
@@ -29,7 +30,7 @@ const getLabel = () => {
   };
 let id;
   return HttpRequest.get(
-    `https://digitalapi.auspost.com.au/test/shipping/v1/labels/${id}`
+    `${API_Endpoint}/shipping/v1/labels/${id}`
   )
     .then((res: AxiosResponse) => {
       console.log("getLabel", res.data);

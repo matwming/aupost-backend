@@ -5,6 +5,7 @@ import {validationResult} from "express-validator";
 import {accountNumberToAuthProd, HttpRequest} from "../../config/config";
 import {AxiosResponse} from "axios";
 import axios from 'axios';
+import {API_Endpoint} from '../../config/config';
 
 const getShipment = (req: Request, res: Response) => {
     console.log('getting shipments...')
@@ -42,6 +43,10 @@ export const createAuShipment = async (req: Request, res: Response) => {
         contents,
         value,
         district,
+        quantity,
+        postcode,
+        reference1,
+        reference2
     } = req.body;
     console.log('create-aushipment', req.body);
     const {email} = req.body.user;
@@ -51,15 +56,16 @@ export const createAuShipment = async (req: Request, res: Response) => {
         "shipments": [
             {
                 "shipment_reference": "My second shipment ref",
-                "customer_reference_1": "cb1234",
-                "customer_reference_2": "cb2345",
+                "customer_reference_1": reference1,
+                "customer_reference_2": reference2,
                 "from": {
-                    "name": "Lynn",
+                    "name": "Jotec",
+                    "business_name":"Jotec Australia Pty Ltd",
                     "lines": [
-                        "420 Station Street"
+                        "6/41-43 Lexton Road"
                     ],
-                    "suburb": "Box Hill",
-                    "postcode": "3128",
+                    "suburb": "Box Hill North",
+                    "postcode": "3129",
                     "state": "VIC"
 
                 },
@@ -72,7 +78,7 @@ export const createAuShipment = async (req: Request, res: Response) => {
                     "suburb": `n${district}`,
                     "state": `n${province}`,
                     "country": "CN",
-                    "postcode": `1000`,
+                    "postcode": postcode??'1000',
                     "phone": `${phone}`,
                     "email": `${email}`,
                     "delivery_instructions": "NA"
@@ -88,10 +94,11 @@ export const createAuShipment = async (req: Request, res: Response) => {
                         "commercial_value": false,
                         "classification_type": "GIFT",
                         "description_of_other": `${contents}`,
+                        "international_parcel_sender_name":"Jotec",
                         "item_contents": [
                             {
                                 "description": `${contents}`,
-                                "quantity": 1,
+                                "quantity": quantity??1,
                                 "value": `${value}`,
                                 "country_of_origin": "AU",
                             }
@@ -105,7 +112,7 @@ export const createAuShipment = async (req: Request, res: Response) => {
         // @ts-ignore
         const authorization= accountNumberToAuthProd[post_account_number];
         let response:AxiosResponse = await axios.post(
-            "https://digitalapi.auspost.com.au/shipping/v1/shipments",
+            `${API_Endpoint}/shipping/v1/shipments`,
             {...shipmentData},{
                 headers: {
                     "Account-Number":post_account_number,

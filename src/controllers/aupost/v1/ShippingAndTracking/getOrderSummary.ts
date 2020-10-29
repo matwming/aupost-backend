@@ -1,8 +1,9 @@
 import {Request, Response} from "express";
-import {HttpRequest} from "../../../../config/config";
-import {AxiosResponse} from "axios";
+import {accountNumberToAuthProd,API_Endpoint} from "../../../../config/config";
+import axios,{AxiosResponse} from "axios";
 import fs from 'fs';
 import path from 'path';
+
 
 const getOrderSummary = async (req: Request, res: Response) => {
     const {orderId} = req.params;
@@ -13,11 +14,16 @@ const getOrderSummary = async (req: Request, res: Response) => {
     let tempFilePath = path.join(process.cwd(),'ordersummary.pdf');
     console.log('tempFilePath',tempFilePath);
     let file=fs.createWriteStream(tempFilePath);
-    let stream:AxiosResponse =  await HttpRequest({
-        url:`https://digitalapi.auspost.com.au/test/shipping/v1/orders/${orderId}/summary`,
+    //@ts-ignore
+    const authorization=accountNumberToAuthProd[accountNumber];
+    let stream:AxiosResponse =  await axios({
+        url:`${API_Endpoint}/shipping/v1/orders/${orderId}/summary`,
         responseType:'stream',
         headers:{
-            "Account-Number":accountNumber
+            "Account-Number":accountNumber,
+            "Authorization":`Basic ${authorization}`,
+            "Content-type":"application/json",
+            "Accept":"application/json"
         }
     });
     stream.data.pipe(file).on('finish',()=>{
