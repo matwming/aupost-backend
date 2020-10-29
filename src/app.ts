@@ -11,18 +11,9 @@ import cors from 'cors';
 const app = express();
 const port =8180;
 
-export const pool=mysql.createPool({
-    connectionLimit:100,
-    host:'127.0.0.1',
-    port:3306,
-    user:'root',
-    password:'Zhaoying@8604',
-    database:'aupost_project',
-    debug:false,
-    multipleStatements:true
-});
+//localhost
 
-// export const pool = mysql.createPool({
+// export const pool=mysql.createPool({
 //     connectionLimit:100,
 //     host:'127.0.0.1',
 //     port:3306,
@@ -32,13 +23,37 @@ export const pool=mysql.createPool({
 //     debug:false
 // });
 
+//production
+// export const pool = mysql.createPool({
+//     connectionLimit:100,
+//     host:'13.75.232.156',
+//     port:3306,
+//     user:'root',
+//     password:'Zhaoying@8604',
+//     database:'aupost_project',
+//     debug:false,
+//     multipleStatements:true
+// });
+
+//aws
+export const pool = mysql.createPool({
+    connectionLimit:100,
+    host:'aupost.cv8raqlzj5t5.ap-southeast-2.rds.amazonaws.com',
+    port:3306,
+    user:'root',
+    password:'qaz123456',
+    database:'aupost_project',
+    debug:false,
+    multipleStatements:true
+});
+
 pool.getConnection((err:MysqlError,connection:PoolConnection)=>{
     if(err){
         console.error('error connecting: ', err.stack);
         return;
     }
     console.log('successfully connected to aupost_project');
-    connection.release();
+    //connection.release();
     //connection.destroy();
 });
 
